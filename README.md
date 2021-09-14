@@ -1,2 +1,3 @@
-# onchain
-Yam On Chain Proposals
+# Yam On Chain Proposals
+
+**[Triggered Proposals](https://yam.finance/#/governance)**
