@@ -1,7 +1,8 @@
 # Yam On Chain Proposals
 
+![Github Actions]()
+
 **[Triggered Proposals](https://yam.finance/#/governance)**
-![Github Actions](https://github.com/gakonst/dapptools-template/workflows/Tests/badge.svg)
 
 
 ## Building and testing
