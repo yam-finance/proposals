@@ -34,10 +34,11 @@ contract Prop19 is YAMv3Test {
 
     /**
      * Summary:
-     * 1. Give Proposal permissions to use index staking contract and Yam's synth farming contracts
-     * 2. Send YAM to distributor - uPUNK rewards payout
-     * 3. Send USDC to distributor - monthly contributor payout
-     * 4. Delegate INDEX to Feddas
+     * 1. Give Proposol permissions to use vestingPool
+     * 2. Approve exiting uGAS 0921
+     * 2. Approve entering uGAS 1221
+     * 3. Approve entering uPUNKS 1221
+     * 4. Whitelist withdrawals for contributor payments and uGAS/uPUNKS farming
      **/
     function test_onchain_prop_19() public {
 
