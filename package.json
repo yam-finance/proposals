@@ -1,0 +1,22 @@
+{
+  "name": "yam-proposals",
+  "version": "0.0.1",
+  "description": "YAM proposal repo",
+  "scripts": {
+    "test": "./scripts/dapp-test.sh"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ethers": "^5.0.8",
+    "ganache-cli": "^6.10.1-beta.2",
+    "ganache-core": "^2.11.3-beta.0",
+    "yam": "github:yam-finance/yamV3"
+  },
+  "devDependencies": {
+    "@truffle/hdwallet-provider": "^1.0.43",
+    "dotenv-flow": "^3.2.0",
+    "ethereumjs-abi": "^0.6.8",
+    "ethereumjs-util": "^7.0.10"
+  }
+}
