@@ -103,11 +103,7 @@ contract Proposal19 {
             0x31920DF2b31B5f7ecf65BDb2c497DE31d299d472,
             yearlyUSDToMonthlyUSD(84000 * (10**6))
         );
-        // Indigo
-        USDC.transfer(
-            0xC45d45b54045074Ed12d1Fe127f714f8aCE46f8c,
-            yearlyUSDToMonthlyUSD(60000 * (10**6))
-        );
+
         uint256 usdcBalance = USDC.balanceOf(address(this));
         USDC.approve(address(yUSDC), usdcBalance);
         yUSDC.deposit(usdcBalance, RESERVES);
