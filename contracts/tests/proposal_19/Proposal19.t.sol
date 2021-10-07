@@ -8,6 +8,7 @@ import {IERC20} from "../../../node_modules/yam/contracts/lib/IERC20.sol";
 import {UGAS1221Farming} from "../../../node_modules/yam/contracts/tests/ugas_farming/UGAS1221Farming.sol";
 import {UPUNKS1221Farming} from "../../../node_modules/yam/contracts/tests/upunks_farming/UPUNKS1221Farming.sol";
 import {YAMDelegate3} from "../../../node_modules/yam/contracts/token/YAMDelegate3.sol";
+import {Swapper} from "../../../node_modules/yam/contracts/tests/swapper/Swapper.sol";
 
 import {Proposal19} from "../../proposals/proposal_19/Proposal19.sol";
 
@@ -24,6 +25,10 @@ contract Prop19 is YAMv3Test {
 
     address internal constant TREASURY_MULTISIG =
         0x744D16d200175d20E6D8e5f405AEfB4EB7A962d1;
+
+    Swapper internal constant SWAPPER = Swapper(0xB4E5BaFf059C5CE3a0EE7ff8e9f16ca9dd91F1fE);
+
+    address internal INDEX = 0x0954906da0Bf32d5479e25f46056d22f08464cab;
 
     function setUp() public {
         setUpCore();
@@ -42,10 +47,10 @@ contract Prop19 is YAMv3Test {
      **/
     function test_onchain_prop_19() public {
 
-        address[] memory targets = new address[](5);
-        uint256[] memory values = new uint256[](5);
-        string[] memory signatures = new string[](5);
-        bytes[] memory calldatas = new bytes[](5);
+        address[] memory targets = new address[](7);
+        uint256[] memory values = new uint256[](7);
+        string[] memory signatures = new string[](7);
+        bytes[] memory calldatas = new bytes[](7);
 
         string
             memory description = "Setup proposol as sub gov on vestingPool, approve moving of uGas/uPunks farming, whitelist withdrawals for contributor payments and for uGas/uPunks farming";
@@ -70,12 +75,23 @@ contract Prop19 is YAMv3Test {
         signatures[3] = "setSubGov(address,bool)";
         calldatas[3] = abi.encode(address(proposal), true);
 
+        // -- Set subgov for swapper
+        targets[4] = address(SWAPPER);
+        signatures[4] = "setIsSubGov(address,bool)";
+        calldatas[4] = abi.encode(proposal, true);
+
+
+        // -- Transfer 5k INDEX to reserves for selling
+        targets[5] = address(INDEX);
+        signatures[5] = "transfer(address,uint256)";
+        calldatas[5] = abi.encode(address(reserves), 5000 * (10**18));
+
         // -- Whitelist proposal to withdraw usdc. whitelist Swapper to withdraw WETH, SUSHI, and DPI
-        targets[4] = address(reserves);
-        signatures[4] = "whitelistWithdrawals(address[],uint256[],address[])";
-        address[] memory whos = new address[](3);
-        uint256[] memory amounts = new uint256[](3);
-        address[] memory tokens = new address[](3);
+        targets[6] = address(reserves);
+        signatures[6] = "whitelistWithdrawals(address[],uint256[],address[])";
+        address[] memory whos = new address[](4);
+        uint256[] memory amounts = new uint256[](4);
+        address[] memory tokens = new address[](4);
 
         whos[0] = address(proposal);
         amounts[0] = uint256(-1);
@@ -89,7 +105,11 @@ contract Prop19 is YAMv3Test {
         amounts[2] = uint256(-1);
         tokens[2] = address(weth);
 
-        calldatas[4] = abi.encode(whos, amounts, tokens);
+        whos[3] = address(SWAPPER);
+        amounts[3] = uint256(5000*(10**18));
+        tokens[3] = address(INDEX);
+
+        calldatas[6] = abi.encode(whos, amounts, tokens);
 
         yamhelper.getQuorum(yamV3, me);
         yamhelper.bing();
@@ -102,30 +122,32 @@ contract Prop19 is YAMv3Test {
     }
 
     function executeProposal() internal {
-        proposal.executeStepOne();
+        proposal.execute();
         UGAS_0921_FARMING.update_twap();
         UGAS_1221_FARMING.update_twap();
         UPUNKS_1221_FARMING.update_twap();
         indexStaking.update_twap();
+        SWAPPER.updateCumulativePrice(3);
         yamhelper.ff(61 minutes);
 
         UGAS_0921_FARMING.exit();
         UGAS_1221_FARMING.enter();
         UPUNKS_1221_FARMING.enter();
-
-        // proposal.executeStepTwo();
+        SWAPPER.execute(3, 500 * (10**18), 0);
     }
 
     function tests() internal {
         // Assert reserves have the yUSDC we should have
         assertTrue(
             IERC20(address(yUSDC)).balanceOf(address(reserves)) >
-                390000 * (10**6)
+                800000 * (10**6)
         );
         // Assert reserves have the WETH we should have
-        assertTrue(IERC20(address(WETH)).balanceOf(address(reserves)) > 33005041943861866342);
-        assertTrue(IERC20(0xF6E15Cdf292D36A589276C835cC576F0DF0Fe53A).balanceOf(address(UGAS_1221_FARMING)) > 210628913073199628716);
-        assertTrue(IERC20(0x9469313a1702dC275015775249883cFc35Aa94d8).balanceOf(address(UPUNKS_1221_FARMING)) > 70062703759388895375);
+        assertTrue(IERC20(address(WETH)).balanceOf(address(reserves)) >= 33005041943861866342);
+        // Assert farming contracts should have the LP tokens
+        assertTrue(IERC20(0xF6E15Cdf292D36A589276C835cC576F0DF0Fe53A).balanceOf(address(UGAS_1221_FARMING)) >= 210628913073199628716);
+        assertTrue(IERC20(0x9469313a1702dC275015775249883cFc35Aa94d8).balanceOf(address(UPUNKS_1221_FARMING)) >= 65582453429240147621);
+        // Assert no USDC or yUSDC was left in the proposal
         assertEq(IERC20(USDC).balanceOf(address(proposal)), 0);
         assertEq(IERC20(yUSDC).balanceOf(address(proposal)), 0);
     }

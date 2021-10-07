@@ -1,9 +1,10 @@
 pragma solidity 0.5.15;
+pragma experimental ABIEncoderV2;
 
 import {VestingPool} from "../../../node_modules/yam/contracts/tests/vesting_pool/VestingPool.sol";
 import {IERC20} from "../../../node_modules/yam/contracts/lib/IERC20.sol";
 import {YAMTokenInterface} from "../../../node_modules/yam/contracts/token/YAMTokenInterface.sol";
-
+import {Swapper} from "../../../node_modules/yam/contracts/tests/swapper/Swapper.sol";
 interface IBasicIssuanceModule {
     function redeem(
         IERC20 setToken,
@@ -39,7 +40,8 @@ contract Proposal19 {
     IERC20 internal constant USDC =
         IERC20(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
 
-    function executeStepOne() public {
+    Swapper internal constant SWAPPER = Swapper(0xB4E5BaFf059C5CE3a0EE7ff8e9f16ca9dd91F1fE);
+    function execute() public {
         IERC20(address(yUSDC)).transferFrom(
             RESERVES,
             address(this),
@@ -101,12 +103,19 @@ contract Proposal19 {
             0x31920DF2b31B5f7ecf65BDb2c497DE31d299d472,
             yearlyUSDToMonthlyUSD(84000 * (10**6))
         );
-
+        // Indigo
+        USDC.transfer(
+            0xC45d45b54045074Ed12d1Fe127f714f8aCE46f8c,
+            yearlyUSDToMonthlyUSD(60000 * (10**6))
+        );
         uint256 usdcBalance = USDC.balanceOf(address(this));
         USDC.approve(address(yUSDC), usdcBalance);
         yUSDC.deposit(usdcBalance, RESERVES);
 
-        // Close indigo's stream
+        // Close Tom stream
+        pool.closeStream(63);
+
+        // Close Indigo stream
         pool.closeStream(59);
 
         // Update Ross stream
@@ -176,6 +185,20 @@ contract Proposal19 {
             0 days,
             1818 * (10**24)
         );
+
+        // Sushiswap 2 hop INDEX to ETH to USDC
+        SWAPPER.addSwap(
+            Swapper.SwapParams({
+                sourceToken: 0x0954906da0Bf32d5479e25f46056d22f08464cab,
+                destinationToken: 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48,
+                router: 0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F,
+                pool1: 0xA73DF646512C82550C2b3C0324c4EEdEE53b400C,
+                pool2: 0x397FF1542f962076d0BFE58eA045FfA2d347ACa0,
+                sourceAmount: 5000 * (10**18),
+                slippageLimit: 35 * (10**15)
+            })
+        );
+
     }
 
     function yearlyUSDToMonthlyUSD(uint256 yearlyUSD)
