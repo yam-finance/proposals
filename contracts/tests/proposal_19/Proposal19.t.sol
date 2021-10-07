@@ -39,11 +39,13 @@ contract Prop19 is YAMv3Test {
 
     /**
      * Summary:
-     * 1. Give Proposol permissions to use vestingPool
-     * 2. Approve exiting uGAS 0921
+     * 1. Approve exiting uGAS 0921
      * 2. Approve entering uGAS 1221
      * 3. Approve entering uPUNKS 1221
-     * 4. Whitelist withdrawals for contributor payments and uGAS/uPUNKS farming
+     * 4. Setup proposal as subGov on vestingPool
+     * 5. Setup proposal as subGov on swapper
+     * 6. Transfer 5k INDEX to reserves for selling
+     * 5. Whitelist withdrawals for contributor payments, uGAS/uPUNKS farming, and INDEX selling
      **/
     function test_onchain_prop_19() public {
 
@@ -53,7 +55,7 @@ contract Prop19 is YAMv3Test {
         bytes[] memory calldatas = new bytes[](7);
 
         string
-            memory description = "Setup proposol as sub gov on vestingPool, approve moving of uGas/uPunks farming, whitelist withdrawals for contributor payments and for uGas/uPunks farming";
+            memory description = "Setup proposol as sub gov on vestingPool and swapper, approve moving of uGas/uPunks farming and index, whitelist withdrawals for contributor payments, for uGas/uPunks farming, and index sale";
 
         // -- Approve exiting UGAS_0921_Farming
         targets[0] = address(UGAS_0921_FARMING);
@@ -75,7 +77,7 @@ contract Prop19 is YAMv3Test {
         signatures[3] = "setSubGov(address,bool)";
         calldatas[3] = abi.encode(address(proposal), true);
 
-        // -- Set subgov for swapper
+        // -- Set subGov for swapper
         targets[4] = address(SWAPPER);
         signatures[4] = "setIsSubGov(address,bool)";
         calldatas[4] = abi.encode(proposal, true);
