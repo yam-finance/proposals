@@ -109,78 +109,11 @@ contract Proposal19 {
          * @notice Setup `YAM` streams.
          */
 
-        // Close Tom stream
-        pool.closeStream(63);
-
-        // Close Indigo stream
-        pool.closeStream(59);
-
         // Update Ross stream
-        pool.closeStream(65);
         pool.openStream(
             0x88c868B1024ECAefDc648eb152e91C57DeA984d0,
             180 days,
             1250 * (10**24) * 6
-        );
-
-        // Update Blokku stream
-        pool.closeStream(61);
-        pool.openStream(
-            0x392027fDc620d397cA27F0c1C3dCB592F27A4dc3,
-            180 days,
-            2333 * (10**24) * 6
-        );
-
-        // Update Kris stream
-        pool.closeStream(62);
-        pool.openStream(
-            0x386568164bdC5B105a66D8Ae83785D4758939eE6,
-            180 days,
-            667 * (10**24) * 6
-        );
-
-        // Update Jono stream
-        pool.closeStream(56);
-        pool.openStream(
-            0xFcB4f3a1710FefA583e7b003F3165f2E142bC725,
-            180 days,
-            800 * (10**24) * 6
-        );
-
-        // Update Will stream
-        pool.closeStream(57);
-        pool.openStream(
-            0x31920DF2b31B5f7ecf65BDb2c497DE31d299d472,
-            180 days,
-            1600 * (10**24) * 6
-        );
-
-        // Open Snake stream
-        pool.openStream(
-            0xce1559448e21981911fAC70D4eC0C02cA1EFF39C,
-            180 days,
-            5120 * (10**24) * 6
-        );
-
-        // Open Joe stream
-        pool.openStream(
-            0x1Ba2A537A771AA4EaC2f18427716557e4E744864,
-            180 days,
-            853 * (10**24) * 6
-        );
-
-        // Snake trial period payment
-        pool.openStream(
-            0xce1559448e21981911fAC70D4eC0C02cA1EFF39C,
-            0 days,
-            4545 * (10**24)
-        );
-
-        // Joe trial period payment
-        pool.openStream(
-            0x1Ba2A537A771AA4EaC2f18427716557e4E744864,
-            0 days,
-            1818 * (10**24)
         );
     }
 
