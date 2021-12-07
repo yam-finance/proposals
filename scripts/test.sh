@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -e
 
 oops() {
@@ -7,9 +7,6 @@ oops() {
 }
 
 export ETH_RPC_URL="https://fee7372b6e224441b747bf1fde15b2bd.eth.rpc.rivet.cloud"
-export DAPP_LIB=./node_modules
-export DAPP_SRC=./contracts
-export DAPP_SOLC_VERSION=0.5.15
 export SOLC_FLAGS="--optimize --optimize-runs 50000"
 
 dapp build
@@ -18,8 +15,8 @@ block=$(seth block latest)
 
 export DAPP_TEST_TIMESTAMP=$(seth --field timestamp <<< "$block")
 export DAPP_TEST_NUMBER=$(seth --field number <<< "$block")
-export DAPP_TEST_ORIGIN="0xec3281124d4c2fca8a88e3076c1e7749cfecb7f2"
+export DAPP_TEST_ORIGIN="0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f"
+export DAPP_TEST_ADDRESS="0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f"
 export DAPP_TEST_CHAINED=99
-export DAPP_TEST_ADDRESS="0xec3281124d4c2fca8a88e3076c1e7749cfecb7f2"
 printf 'Running test for address %s\n' "$DAPP_TEST_ADDRESS"
-LANG=C.UTF-8 dapp test --rpc-url "http://192.168.1.39:8545" -v --verbosity 5 --match test_onchain_prop_19
+LANG=C.UTF-8 dapp test --rpc-url "https://eth-mainnet.alchemyapi.io/v2/kz2ThUAbvLkX8ZB0_eaMfnR80ZOkBTFU" -vv
