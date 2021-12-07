@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "description": "YAM proposal repo",
   "scripts": {
-    "test": "./scripts/dapp-test.sh"
+    "test": "./scripts/test.sh"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "ethers": "^5.0.8",
     "ganache-cli": "^6.10.1-beta.2",
