@@ -96,10 +96,10 @@ contract Proposal20 {
             yearlyUSDToMonthlyUSD(26256 * (10**6), 1)
         );
         
-        // Jono
+        // VDM
         USDC.transfer(
             0xFcB4f3a1710FefA583e7b003F3165f2E142bC725,
-            yearlyUSDToMonthlyUSD(42000 * (10**6), 1)
+            yearlyUSDToMonthlyUSD(42000 * (10**6), 2)
         );
         
         // Jason
