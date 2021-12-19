@@ -18,10 +18,7 @@ contract HEVMHelpers is DSTest {
     event SlotFound(address who, string sig, uint slot);
     event Logger(uint, bytes);
 
-    bytes20 constant CHEAT_CODE =
-        bytes20(uint160(uint(keccak256('hevm cheat code'))));
-
-    Hevm hevm = Hevm(address(CHEAT_CODE));
+    Hevm hevm = Hevm(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
 
     mapping (address => mapping(bytes4 => uint256)) public slots;
     mapping (address => mapping(bytes4 => bool)) public finds;
@@ -426,7 +423,6 @@ contract YAMHelper is HEVMHelpers {
     }
 
     function manualCheckpoint(YAMDelegator yamV3, address account, uint256 checkpoint, uint256 fromBlock, uint256 votes) public {
-        /* Hevm hevm = Hevm(address(CHEAT_CODE)); */
         bytes32[] memory keys = new bytes32[](2);
         keys[0] = bytes32(uint256(uint160(account)));
         keys[1] = bytes32(uint256(safe32(checkpoint, "")));
@@ -435,7 +431,6 @@ contract YAMHelper is HEVMHelpers {
     }
 
     function write_last_checkpoint(YAMDelegator yamV3, address account, uint256 votes) public {
-        /* Hevm hevm = Hevm(address(CHEAT_CODE)); */
         uint256 lcp = yamV3.numCheckpoints(account);
         if (lcp > 0) {
           lcp = lcp - 1;
@@ -459,17 +454,14 @@ contract YAMHelper is HEVMHelpers {
     }
 
     function bing() public {
-        /* Hevm hevm = Hevm(address(CHEAT_CODE)); */
         hevm.roll(block.number + 1);
     }
 
     function bong(uint256 x) public {
-        /* Hevm hevm = Hevm(address(CHEAT_CODE)); */
         hevm.roll(block.number + x);
     }
 
     function ff(uint256 time) public {
-        /* Hevm hevm = Hevm(address(CHEAT_CODE)); */
         hevm.warp(block.timestamp + time);
     }
 }

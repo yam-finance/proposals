@@ -64,7 +64,7 @@ contract YAMTest is YAMHelper {
     Vm internal vm;
 
     function setUpYAMTest() internal {
-        vm = Vm(address(CHEAT_CODE));
+        vm = Vm(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
         proposer = address(this);
         addKnown(address(yamDelegator), "pendingGov()", 4);
         addKnown(address(yamDelegator), "totalSupply()", 8);
