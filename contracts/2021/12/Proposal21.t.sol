@@ -61,7 +61,7 @@ contract Proposal21test is YAMv3Test {
         assertEq(timelock.delay(), 432000);
 
         // Reserves should have the yUSDC we should have
-        assertTrue(IERC20(yUSDC).balanceOf(address(reserves)) > 679253027501);
+        assertTrue(IERC20(yUSDC).balanceOf(address(reserves)) > 684265734101);
 
         // No USDC or yUSDC should be left in the proposal
         assertEq(IERC20(USDC).balanceOf(address(proposal)), 0);

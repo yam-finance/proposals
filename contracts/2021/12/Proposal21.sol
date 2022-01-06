@@ -62,7 +62,7 @@ contract Proposal21 {
         // Blokku
         USDC.transfer(
             0x392027fDc620d397cA27F0c1C3dCB592F27A4dc3,
-            yearlyToMonthlyUSD(45000, 1)
+            yearlyToMonthlyUSD(22500, 1)
         );
 
         // Kris
@@ -80,7 +80,7 @@ contract Proposal21 {
         // Snake
         USDC.transfer(
             0xce1559448e21981911fAC70D4eC0C02cA1EFF39C,
-            yearlyToMonthlyUSD(72000, 1)
+            yearlyToMonthlyUSD(28800, 1)
         );
 
         uint256 usdcBalance = USDC.balanceOf(address(this));
