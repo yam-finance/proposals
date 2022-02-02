@@ -74,16 +74,6 @@ contract Proposal22 {
         // Transfer 10 WETH to the multisig
         IERC20(address(WETH)).transferFrom(RESERVES, MULTISIG, 10 * (10**18));
 
-        // Transfer 1000 UMA to the multisig
-        IERC20(address(UMA)).transferFrom(RESERVES, MULTISIG, 1000 * (10**18));
-
-        // Transfer 100k USDC to the multisig
-        IERC20(address(USDC)).transferFrom(
-            RESERVES,
-            MULTISIG,
-            100000 * (10**6)
-        );
-
         // Synths tokens
         IERC20(address(UGASSEP21)).transferFrom(
             RESERVES,
@@ -157,6 +147,50 @@ contract Proposal22 {
             IERC20(address(yUSDCV2)).balanceOf(RESERVES)
         );
         yUSDCV2.withdraw(type(uint256).max);
+
+        // Stablecoin transfers
+
+        // Chilly
+        USDC.transfer(
+            0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C,
+            yearlyToMonthlyUSD(93800, 1)
+        );
+
+        // Designer
+        USDC.transfer(
+            0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C,
+            yearlyToMonthlyUSD(92400, 1)
+        );
+
+        // Ross
+        USDC.transfer(
+            0x88c868B1024ECAefDc648eb152e91C57DeA984d0,
+            yearlyToMonthlyUSD(84000, 1)
+        );
+
+        // Blokku
+        USDC.transfer(
+            0x392027fDc620d397cA27F0c1C3dCB592F27A4dc3,
+            yearlyToMonthlyUSD(45000, 1)
+        );
+
+        // Kris
+        USDC.transfer(
+            0x386568164bdC5B105a66D8Ae83785D4758939eE6,
+            yearlyToMonthlyUSD(15000, 1)
+        );
+
+        // Will
+        USDC.transfer(
+            0x31920DF2b31B5f7ecf65BDb2c497DE31d299d472,
+            yearlyToMonthlyUSD(84000, 1)
+        );
+
+        // Snake
+        USDC.transfer(
+            0xce1559448e21981911fAC70D4eC0C02cA1EFF39C,
+            yearlyToMonthlyUSD(72000, 1)
+        );
 
         uint256 usdcBalance = USDC.balanceOf(address(this));
         USDC.approve(address(yUSDC), usdcBalance);

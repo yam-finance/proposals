@@ -154,7 +154,7 @@ contract Proposal22test is YAMTest {
 
         // Reserves should have the uma rewards
         assertTrue(
-            IERC20(UMA).balanceOf(address(reserves)) > 28000000000000000000000
+            IERC20(UMA).balanceOf(address(reserves)) > 29000000000000000000000
         );
 
         // Reserves should have the sushi rewards
@@ -163,7 +163,7 @@ contract Proposal22test is YAMTest {
         );
 
         // Reserves should have the yUSDC we should have
-        assertTrue(IERC20(yUSDC).balanceOf(address(reserves)) > 1350000000000);
+        assertTrue(IERC20(yUSDC).balanceOf(address(reserves)) > 1400000000000);
 
         // No synths tokens should be left in the treasury
         assertEq(IERC20(SCJAN6).balanceOf(address(reserves)), 0);
