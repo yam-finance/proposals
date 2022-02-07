@@ -146,7 +146,7 @@ contract Proposal22test is YAMTest {
         vm.roll(block.number + 1);
         proposal.execute();
         ff(61 minutes);
-
+        
         // Reserves should have the weth we should have
         assertTrue(
             IERC20(WETH).balanceOf(address(reserves)) > 277000000000000000000
@@ -163,7 +163,10 @@ contract Proposal22test is YAMTest {
         );
 
         // Reserves should have the yUSDC we should have
-        assertTrue(IERC20(yUSDC).balanceOf(address(reserves)) > 1400000000000);
+        assertTrue(IERC20(yUSDC).balanceOf(address(reserves)) > 1300000000000);
+
+        // Reserves should have the USDC we should have
+        assertEq(IERC20(USDC).balanceOf(address(reserves)), 100000000000);
 
         // No synths tokens should be left in the treasury
         assertEq(IERC20(SCJAN6).balanceOf(address(reserves)), 0);
@@ -181,3 +184,4 @@ contract Proposal22test is YAMTest {
         assertEq(IERC20(yUSDC).balanceOf(address(proposal)), 0);
     }
 }
+

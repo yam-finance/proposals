@@ -131,10 +131,6 @@ contract Proposal22 {
         LSPSCDEC2.settle(IERC20(address(SCDEC2)).balanceOf(address(this)), 0);
         LSPSCNOV3.settle(IERC20(address(SCNOV3)).balanceOf(address(this)), 0);
 
-        // Send unrwapped rewards to reserves
-        WETH.transfer(RESERVES, WETH.balanceOf(address(this)));
-        UMA.transfer(RESERVES, UMA.balanceOf(address(this)));
-
         // Withdraw USDC and yUSDC
         IERC20(address(USDC)).transferFrom(
             RESERVES,
@@ -147,6 +143,11 @@ contract Proposal22 {
             IERC20(address(yUSDCV2)).balanceOf(RESERVES)
         );
         yUSDCV2.withdraw(type(uint256).max);
+
+        // Send unrwapped rewards to reserves
+        WETH.transfer(RESERVES, WETH.balanceOf(address(this)));
+        UMA.transfer(RESERVES, UMA.balanceOf(address(this)));
+        USDC.transfer(RESERVES, 100000 * (10**6));
 
         // Stablecoin transfers
 
