@@ -169,18 +169,6 @@ contract Proposal22 {
             yearlyToMonthlyUSD(84000, 1)
         );
 
-        // Blokku
-        USDC.transfer(
-            0x392027fDc620d397cA27F0c1C3dCB592F27A4dc3,
-            yearlyToMonthlyUSD(45000, 1)
-        );
-
-        // Kris
-        USDC.transfer(
-            0x386568164bdC5B105a66D8Ae83785D4758939eE6,
-            yearlyToMonthlyUSD(15000, 1)
-        );
-
         // Will
         USDC.transfer(
             0x31920DF2b31B5f7ecf65BDb2c497DE31d299d472,
@@ -207,6 +195,9 @@ contract Proposal22 {
 
         // Close Krug stream
         pool.closeStream(86);
+
+        // Close Snake stream
+        pool.closeStream(93);
 
         // Transfer 25k YAM to the multisig
         pool.payout(
