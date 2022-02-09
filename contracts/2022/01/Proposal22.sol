@@ -217,3 +217,4 @@ contract Proposal22 {
         return (((yearlyUSD * (10**6)) / uint256(12)) * months);
     }
 }
+
