@@ -1,4 +1,5 @@
-yamV3/=lib/yamV3/contracts/
 ds-test/=lib/ds-test/src/
 openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/
-uma/=lib/uma/packages/core/contracts/
+@openzeppelin/=lib/openzeppelin-contracts/
+uma/=lib/protocol/packages/core/contracts/
+yamV3/=lib/yamV3/contracts/

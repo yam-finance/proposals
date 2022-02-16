@@ -1,0 +1,14 @@
+[default]
+src = 'src'
+out = 'out'
+libs = ['lib']
+remappings = [
+    'ds-test/=lib/ds-test/src/',
+    'openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/',
+    '@openzeppelin/=lib/openzeppelin-contracts/',
+    'uma/=lib/protocol/packages/core/contracts/',
+    'yamV3/=lib/yamV3/contracts/',
+]
+eth-rpc-url = "https://fee7372b6e224441b747bf1fde15b2bd.eth.rpc.rivet.cloud"
+
+# See more config options https://github.com/gakonst/foundry/tree/master/config
