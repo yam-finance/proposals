@@ -1,15 +1,12 @@
-[submodule "lib/yamV3"]
-	path = lib/yamV3
-	url = https://github.com/yam-finance/yamV3
 [submodule "lib/ds-test"]
 	path = lib/ds-test
 	url = https://github.com/dapphub/ds-test
-[submodule "lib/uma"]
-	path = lib/uma
-	url = https://github.com/UMAprotocol/protocol
 [submodule "lib/protocol"]
 	path = lib/protocol
 	url = https://github.com/UMAprotocol/protocol
 [submodule "lib/openzeppelin-contracts"]
 	path = lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "lib/yamV3"]
+	path = lib/yamV3
+	url = https://github.com/yam-finance/yamV3
