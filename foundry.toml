@@ -1,5 +1,5 @@
 [default]
-src = 'contracts'
+src = 'contracts/governance/'
 out = 'out'
 libs = ['lib']
 

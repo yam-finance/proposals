@@ -1,5 +1,6 @@
 yamV3/=lib/yamV3/contracts/
 ds-test/=lib/ds-test/src/
+forge-std/=lib/forge-std/src/
 @openzeppelin/=lib/openzeppelin-contracts/
 openzeppelin-contracts/=lib/openzeppelin-contracts/contracts
 uma/=lib/uma/packages/core/contracts/
