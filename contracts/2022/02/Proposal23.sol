@@ -207,9 +207,6 @@ contract Proposal23 {
         // Close Snake stream
         pool.closeStream(93);
 
-        // Close Feddas stream
-        pool.closeStream(16);
-
     }
 
     function yearlyToMonthlyUSD(uint256 yearlyUSD, uint256 months)
