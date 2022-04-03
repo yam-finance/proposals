@@ -110,11 +110,11 @@ contract Proposal24 {
 
         // Stablecoin transfers
 
-        // // E
-        // USDC.transfer(
-        //     0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f,
-        //     yearlyToMonthlyUSD(119004, 1)
-        // );
+        // E
+        USDC.transfer(
+            0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f,
+            yearlyToMonthlyUSD(119004, 1)
+        );
 
         // // Chilly
         // USDC.transfer(
