@@ -134,11 +134,11 @@ contract Proposal24 {
         //     yearlyToMonthlyUSD(22500, 1)
         // );
 
-        // // Ross
-        // USDC.transfer(
-        //     0x88c868B1024ECAefDc648eb152e91C57DeA984d0,
-        //     yearlyToMonthlyUSD(84000, 1)
-        // );
+        // Ross
+        USDC.transfer(
+            0x88c868B1024ECAefDc648eb152e91C57DeA984d0,
+            yearlyToMonthlyUSD(84000, 1)
+        );
 
         // // Nushi
         // USDC.transfer(
