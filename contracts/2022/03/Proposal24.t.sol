@@ -19,8 +19,6 @@ contract Proposal24test is YAMTest {
 
     IERC20 internal constant WETH =
         IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
-    IERC20 internal constant UMA =
-        IERC20(0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828);
     IERC20 internal constant SUSHI =
         IERC20(0x6B3595068778DD592e39A122f4f5a5cF09C90fE2);
     address internal constant RESERVES =
@@ -41,12 +39,12 @@ contract Proposal24test is YAMTest {
     }
 
     function test_proposal_24() public {
-        address[] memory targets = new address[](2);
-        uint256[] memory values = new uint256[](2);
-        string[] memory signatures = new string[](2);
-        bytes[] memory calldatas = new bytes[](2);
+        address[] memory targets = new address[](3);
+        uint256[] memory values = new uint256[](3);
+        string[] memory signatures = new string[](3);
+        bytes[] memory calldatas = new bytes[](3);
         string
-            memory description = "Contributors comps for February, vesting pool streams updates, settling synths tokens and success tokens, sending settled and rewards tokens to reserves, claiming sushi for reserves and converting all usdc to yusdc";
+            memory description = "Contributors comps for March, closing old and ongoing vesting pool unclaimed streams, converting all yycrv to yusdc, depositing weth into yearn yCRV/stETH vault and claiming rewards for reserves.";
 
         // Set proposal as sub gov for vestingPool
         targets[0] = address(vestingPool);
@@ -74,6 +72,10 @@ contract Proposal24test is YAMTest {
 
         calldatas[1] = abi.encode(whos, amounts, tokens);
 
+        targets[2] = address(INCENTIVIZER);
+        signatures[2] = "sushiToReserves(uint256)";
+        calldatas[2] = abi.encode(type(uint256).max);
+
         // Get quorum for test proposal
         getQuorum(yamV3, proposer);
         vm.roll(block.number + 1);
@@ -90,6 +92,9 @@ contract Proposal24test is YAMTest {
 
         // Reserves should have the ystETH we should have
         assertTrue(IERC20(ystETH).balanceOf(address(reserves)) > 123000000000000000000);
+
+        // Reserves should have the sushi rewards
+        assertTrue(IERC20(SUSHI).balanceOf(address(reserves)) > 4600000000000000000000);
 
         // Reserves should have the yUSDC we should have
         assertTrue(IERC20(yUSDC).balanceOf(address(reserves)) > 1560000000000);
