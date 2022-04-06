@@ -72,15 +72,15 @@ contract Proposal24 {
         0x97990B693835da58A281636296D2Bf02787DEa17;
     address internal constant MULTISIG =
         0x744D16d200175d20E6D8e5f405AEfB4EB7A962d1;
-    address public constant yyCRV = 0x5dbcF33D8c2E976c6b560249878e6F1491Bca25c;
-    address public constant yCRV = 0xdF5e0e81Dff6FAF3A7e52BA697820c5e32D806A8;
-    address public constant yCRVVault =
+    address internal constant yyCRV = 0x5dbcF33D8c2E976c6b560249878e6F1491Bca25c;
+    address internal constant yCRV = 0xdF5e0e81Dff6FAF3A7e52BA697820c5e32D806A8;
+    address internal constant yCRVVault =
         0xbBC81d23Ea2c3ec7e56D39296F0cbB648873a5d3;
     ILidoPool internal constant lidoPool =
         ILidoPool(0xDC24316b9AE028F1497c275EB9192a3Ea0f67022);
-    address public constant crvstETH =
+    address internal constant crvstETH =
         0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84;
-    address public constant steCRV = 0x06325440D014e39736583c165C2963BA99fAf14E;
+    address internal constant steCRV = 0x06325440D014e39736583c165C2963BA99fAf14E;
     IERC20 internal constant ystETH =
         IERC20(0xdCD90C7f6324cfa40d7169ef80b12031770B4325);
 
@@ -116,11 +116,11 @@ contract Proposal24 {
             yearlyToMonthlyUSD(119004, 1)
         );
 
-        // // Chilly
-        // USDC.transfer(
-        //     0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C,
-        //     yearlyToMonthlyUSD(93800, 1)
-        // );
+        // Chilly
+        USDC.transfer(
+            0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C,
+            yearlyToMonthlyUSD(93800, 1)
+        );
 
         // Designer
         USDC.transfer(
@@ -128,23 +128,11 @@ contract Proposal24 {
             yearlyToMonthlyUSD(92400, 1)
         );
 
-        // // Blokku
-        // USDC.transfer(
-        //     0x392027fDc620d397cA27F0c1C3dCB592F27A4dc3,
-        //     yearlyToMonthlyUSD(22500, 1)
-        // );
-
         // Ross
         USDC.transfer(
             0x88c868B1024ECAefDc648eb152e91C57DeA984d0,
             yearlyToMonthlyUSD(84000, 1)
         );
-
-        // // Nushi
-        // USDC.transfer(
-        //     0xF0EEF765172c9AEAf76B57656A1Cd717033C391c,
-        //     yearlyToMonthlyUSD(84000, 1)
-        // );
 
         // Deposit yUSDC into reserves
         uint256 usdcBalance = USDC.balanceOf(address(this));
