@@ -86,7 +86,6 @@ contract Proposal25 {
 
         // Exit position for UGAS USTONKS UPUNKS
         UGASFarming._approveExit();
-        USTONKSFarming._approveExit();
         UPUNKSFarming._approveExit();
 
         // Claim reward tokens to treasury
@@ -105,27 +104,27 @@ contract Proposal25 {
         // // E
         // YAM.transfer(
         //     0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f,
-        //     18478 * (10**18)
+        //     19318 * (10**18)
         // );
         // // Chilly
         // YAM.transfer(
         //     0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C,
-        //     14565 * (10**18)
+        //     15227 * (10**18)
         // );
         // // Designer
         // YAM.transfer(
         //     0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C,
-        //     14348 * (10**18)
+        //     15000 * (10**18)
         // );
         // // Ross
         // YAM.transfer(
         //     0x88c868B1024ECAefDc648eb152e91C57DeA984d0,
-        //     10870 * (10**18)
+        //     13636 * (10**18)
         // );
         // // Mona
         // YAM.transfer(
         //     0xdADc6F71986643d9e9CB368f08Eb6F1333F6d8f9,
-        //     7243 * (10**18)
+        //     7573 * (10**18)
         // );
 
         // Transfer vesting pool YAM to reserves
