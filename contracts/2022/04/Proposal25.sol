@@ -58,26 +58,26 @@ contract Proposal25 {
             IERC20(address(USDC)).balanceOf(RESERVES)
         );
 
-        // // E
-        // USDC.transfer(
-        //     0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f,
-        //     yearlyToMonthlyUSD(119004, 1)
-        // );
-        // // Chilly
-        // USDC.transfer(
-        //     0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C,
-        //     yearlyToMonthlyUSD(93800, 1)
-        // );
-        // // Designer
-        // USDC.transfer(
-        //     0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C,
-        //     yearlyToMonthlyUSD(92400, 1)
-        // );
-        // // Ross
-        // USDC.transfer(
-        //     0x88c868B1024ECAefDc648eb152e91C57DeA984d0,
-        //     yearlyToMonthlyUSD(84000, 1)
-        // );
+        // E
+        USDC.transfer(
+            0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f,
+            yearlyToMonthlyUSD(119004, 1)
+        );
+        // Chilly
+        USDC.transfer(
+            0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C,
+            yearlyToMonthlyUSD(93800, 1)
+        );
+        // Designer
+        USDC.transfer(
+            0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C,
+            yearlyToMonthlyUSD(92400, 1)
+        );
+        // Ross
+        USDC.transfer(
+            0x88c868B1024ECAefDc648eb152e91C57DeA984d0,
+            yearlyToMonthlyUSD(84000, 1)
+        );
 
         uint256 usdcBalance = USDC.balanceOf(address(this));
         USDC.transfer(RESERVES, usdcBalance);
@@ -101,31 +101,31 @@ contract Proposal25 {
 
         // Yam transfers
 
-        // // E
-        // YAM.transfer(
-        //     0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f,
-        //     19318 * (10**18)
-        // );
-        // // Chilly
-        // YAM.transfer(
-        //     0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C,
-        //     15227 * (10**18)
-        // );
-        // // Designer
-        // YAM.transfer(
-        //     0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C,
-        //     15000 * (10**18)
-        // );
-        // // Ross
-        // YAM.transfer(
-        //     0x88c868B1024ECAefDc648eb152e91C57DeA984d0,
-        //     13636 * (10**18)
-        // );
-        // // Mona
-        // YAM.transfer(
-        //     0xdADc6F71986643d9e9CB368f08Eb6F1333F6d8f9,
-        //     7573 * (10**18)
-        // );
+        // E
+        YAM.transfer(
+            0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f,
+            19318 * (10**18)
+        );
+        // Chilly
+        YAM.transfer(
+            0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C,
+            15227 * (10**18)
+        );
+        // Designer
+        YAM.transfer(
+            0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C,
+            15000 * (10**18)
+        );
+        // Ross
+        YAM.transfer(
+            0x88c868B1024ECAefDc648eb152e91C57DeA984d0,
+            13636 * (10**18)
+        );
+        // Mona
+        YAM.transfer(
+            0xdADc6F71986643d9e9CB368f08Eb6F1333F6d8f9,
+            7573 * (10**18)
+        );
 
         // Transfer vesting pool YAM to reserves
         pool.payout(pool.openStream(RESERVES, 0, 2086282107599161416658680858));
