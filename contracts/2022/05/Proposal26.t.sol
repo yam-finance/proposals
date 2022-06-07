@@ -59,45 +59,48 @@ contract Proposal26test is YAMTest {
         // Whitelist proposal for withdrawals
         targets[0] = address(reserves);
         signatures[0] = "whitelistWithdrawals(address[],uint256[],address[])";
-        address[] memory whos = new address[](7);
-        uint256[] memory amounts = new uint256[](7);
-        address[] memory tokens = new address[](7);
+            address[] memory whos = new address[](7);
+            uint256[] memory amounts = new uint256[](7);
+            address[] memory tokens = new address[](7);
 
-        whos[0] = address(proposal);
-        amounts[0] = type(uint256).max;
-        tokens[0] = address(USDC);
+            //whitelist USDC
+            whos[0] = address(proposal);
+            amounts[0] = type(uint256).max;
+            tokens[0] = address(USDC);
 
-        whos[1] = address(proposal);
-        amounts[1] = type(uint256).max;
-        tokens[1] = address(YAM);
+            //whitelist YAM
+            whos[1] = address(proposal);
+            amounts[1] = type(uint256).max;
+            tokens[1] = address(YAM);
 
-        whos[2] = address(proposal);
-        amounts[2] = type(uint256).max;
-        tokens[2] = address(UGASDEC21);
+            //whitelist UMA synths and success tokens
+            whos[2] = address(proposal);
+            amounts[2] = type(uint256).max;
+            tokens[2] = address(UGASDEC21);
 
-        whos[3] = address(proposal);
-        amounts[3] = type(uint256).max;
-        tokens[3] = address(UPUNKSDEC21);
+            whos[3] = address(proposal);
+            amounts[3] = type(uint256).max;
+            tokens[3] = address(UPUNKSDEC21);
 
-        whos[4] = address(proposal);
-        amounts[4] = type(uint256).max;
-        tokens[4] = address(SCJAN6);
+            whos[4] = address(proposal);
+            amounts[4] = type(uint256).max;
+            tokens[4] = address(SCJAN6);
 
-        whos[5] = address(proposal);
-        amounts[5] = type(uint256).max;
-        tokens[5] = address(SCDEC2);
+            whos[5] = address(proposal);
+            amounts[5] = type(uint256).max;
+            tokens[5] = address(SCDEC2);
 
-        whos[6] = address(proposal);
-        amounts[6] = type(uint256).max;
-        tokens[6] = address(SCNOV3);
-
+            whos[6] = address(proposal);
+            amounts[6] = type(uint256).max;
+            tokens[6] = address(SCNOV3);
         calldatas[0] = abi.encode(whos, amounts, tokens);
 
+        // claim sushi rewards from incentivizer
         targets[1] = address(INCENTIVIZER);
         signatures[1] = "sushiToReserves(uint256)";
         calldatas[1] = abi.encode(type(uint256).max);
 
-        // Send and withdraw test uma
+        // Send 2 uma to twoKeyContract
         targets[2] = address(RESERVES);
         signatures[2] = "oneTimeTransfers(address[],uint256[],address[])";
         address[] memory whosOne = new address[](1);
@@ -108,6 +111,7 @@ contract Proposal26test is YAMTest {
         tokensOne[0] = address(UMA);
         calldatas[2] = abi.encode(whosOne, amountsOne, tokensOne);
 
+        //withdraw 1 UMA from twoKeyContract
         targets[3] = address(twoKeyContract);
         signatures[3] = "withdrawErc20(address,uint256)";
         calldatas[3] = abi.encode(address(UMA), uint256(1000000000000000000));
