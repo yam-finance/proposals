@@ -118,7 +118,7 @@ contract Proposal25test is YAMTest {
 
         // Reserves should have the yam we should have
         assertTrue(
-            IERC20(YAM).balanceOf(address(reserves)) > 280000000000000000000000
+            IERC20(YAM).balanceOf(address(reserves)) > 270000000000000000000000
         );
 
         // Reserves should have the uma we should have
