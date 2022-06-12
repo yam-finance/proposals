@@ -111,7 +111,7 @@ contract Proposal26test is YAMTest {
         tokensOne[0] = address(UMA);
         calldatas[2] = abi.encode(whosOne, amountsOne, tokensOne);
 
-        //withdraw 1 UMA from twoKeyContract
+        // Withdraw 1 uma from twoKeyContract
         targets[3] = address(twoKeyContract);
         signatures[3] = "withdrawErc20(address,uint256)";
         calldatas[3] = abi.encode(address(UMA), uint256(1000000000000000000));
