@@ -68,7 +68,7 @@ contract Proposal26 {
             IERC20(address(USDC)).balanceOf(RESERVES)
         );
 
-        // Send YAM from Treasury to this contract
+        // Withdraw YAM from reserves
         IERC20(address(YAM)).transferFrom(
             RESERVES,
             address(this),
