@@ -95,7 +95,7 @@ contract Proposal26test is YAMTest {
             tokens[6] = address(SCNOV3);
         calldatas[0] = abi.encode(whos, amounts, tokens);
 
-        // claim sushi rewards from incentivizer
+        // Claim sushi rewards from incentivizer
         targets[1] = address(INCENTIVIZER);
         signatures[1] = "sushiToReserves(uint256)";
         calldatas[1] = abi.encode(type(uint256).max);
