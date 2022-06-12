@@ -98,7 +98,7 @@ contract Proposal26 {
 
         // Synths
         
-        // Send all UGASDEC21 and UPUNKSDEC21 from Treasury to this contract
+        // Withdraw UGASDEC21 and UPUNKSDEC21 from reserves
         IERC20(address(UGASDEC21)).transferFrom(
             RESERVES,
             address(this),
