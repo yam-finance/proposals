@@ -143,7 +143,7 @@ contract Proposal26 {
 
     }
     
-    // Function used to distribute compensation to contributors
+    // Function used to distribute comps
     function compSend(
         address _address,
         uint256 amountUSDC,
