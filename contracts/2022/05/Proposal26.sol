@@ -77,8 +77,8 @@ contract Proposal26 {
 
         // Comp transfers
 
-        // // E
-        // compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 9917, 21250, 1);
+        // E
+        compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 9917, 21250, 1);
         // Chilly
         compSend(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 5600, 12000, 1);
         // Designer
@@ -110,13 +110,13 @@ contract Proposal26 {
             IERC20(address(UPUNKSDEC21)).balanceOf(RESERVES)
         );
         
-        //Approve and settle UGASDEC21 and UPUNKSDEC21
+        // Approve and settle UGASDEC21 and UPUNKSDEC21
         UGASDEC21.approve(address(EMPUGASDEC21), type(uint256).max);
         UPUNKSDEC21.approve(address(EMPUPUNKSDEC21), type(uint256).max);
         EMPUGASDEC21.settleExpired();
         EMPUPUNKSDEC21.settleExpired();
 
-        // Withdraw Success tokens from reserves
+        // Withdraw and settle Success tokens from reserves
         IERC20(address(SCJAN6)).transferFrom(
             RESERVES,
             address(this),
@@ -132,7 +132,6 @@ contract Proposal26 {
             address(this),
             IERC20(address(SCNOV3)).balanceOf(RESERVES)
         );
-        // Settle Success tokens
         LSPSCJAN6.settle(IERC20(address(SCJAN6)).balanceOf(address(this)), 0);
         LSPSCDEC2.settle(IERC20(address(SCDEC2)).balanceOf(address(this)), 0);
         LSPSCNOV3.settle(IERC20(address(SCNOV3)).balanceOf(address(this)), 0);

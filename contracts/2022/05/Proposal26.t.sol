@@ -63,17 +63,14 @@ contract Proposal26test is YAMTest {
         uint256[] memory amounts = new uint256[](7);
         address[] memory tokens = new address[](7);
 
-        //whitelist USDC
         whos[0] = address(proposal);
         amounts[0] = type(uint256).max;
         tokens[0] = address(USDC);
 
-        //whitelist YAM
         whos[1] = address(proposal);
         amounts[1] = type(uint256).max;
         tokens[1] = address(YAM);
 
-        //whitelist UMA synths and success tokens
         whos[2] = address(proposal);
         amounts[2] = type(uint256).max;
         tokens[2] = address(UGASDEC21);
