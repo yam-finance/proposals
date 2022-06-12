@@ -90,7 +90,7 @@ contract Proposal26 {
         // VMD backpay
         compSend(0x06d0F6b856bB4ea42C6b0f7e99101EeC3755EEcd, 3625, 1690, 1);
 
-        // Return all remaining USDC back to Treasury
+        // Return remaining USDC and YAM to reserves
         uint256 usdcBalance = USDC.balanceOf(address(this));
         USDC.transfer(RESERVES, usdcBalance);
         
