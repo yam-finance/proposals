@@ -61,7 +61,7 @@ contract Proposal26 {
 
     function execute() public {
         
-        // Send USDC from Treasury to this contract
+        // Withdraw USDC from reserves
         IERC20(address(USDC)).transferFrom(
             RESERVES,
             address(this),
