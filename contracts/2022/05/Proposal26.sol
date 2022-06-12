@@ -116,7 +116,7 @@ contract Proposal26 {
         EMPUGASDEC21.settleExpired();
         EMPUPUNKSDEC21.settleExpired();
 
-        // Send all Success tokens from Treasury to this contract
+        // Withdraw Success tokens from reserves
         IERC20(address(SCJAN6)).transferFrom(
             RESERVES,
             address(this),
