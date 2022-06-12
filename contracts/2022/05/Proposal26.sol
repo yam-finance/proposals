@@ -137,7 +137,7 @@ contract Proposal26 {
         LSPSCDEC2.settle(IERC20(address(SCDEC2)).balanceOf(address(this)), 0);
         LSPSCNOV3.settle(IERC20(address(SCNOV3)).balanceOf(address(this)), 0);
 
-        // Return all WETH and UMA to the Treasury
+        // Deposit WETH and UMA to reserves
         WETH.transfer(RESERVES, WETH.balanceOf(address(this)));
         UMA.transfer(RESERVES, UMA.balanceOf(address(this)));
 
