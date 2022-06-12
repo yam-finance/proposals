@@ -132,7 +132,7 @@ contract Proposal26 {
             address(this),
             IERC20(address(SCNOV3)).balanceOf(RESERVES)
         );
-        // settle all Success Tokens for underlying
+        // Settle Success tokens
         LSPSCJAN6.settle(IERC20(address(SCJAN6)).balanceOf(address(this)), 0);
         LSPSCDEC2.settle(IERC20(address(SCDEC2)).balanceOf(address(this)), 0);
         LSPSCNOV3.settle(IERC20(address(SCNOV3)).balanceOf(address(this)), 0);
