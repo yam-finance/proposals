@@ -75,8 +75,7 @@ contract Proposal26 {
             IERC20(address(YAM)).balanceOf(RESERVES)
         );
 
-        // Send compensation to contributors using the compSend() function
-        // compSend(receivingAddress, USDC amount, YAM Amount, # of months);
+        // Comp transfers
 
         // // E
         // compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 9917, 21250, 1);
