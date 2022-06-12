@@ -93,8 +93,6 @@ contract Proposal26 {
         // Return remaining USDC and YAM to reserves
         uint256 usdcBalance = USDC.balanceOf(address(this));
         USDC.transfer(RESERVES, usdcBalance);
-        
-        // Return all remaining YAM back to Treasury
         uint256 yamBalance = YAM.balanceOf(address(this));
         YAM.transfer(RESERVES, yamBalance);
 
