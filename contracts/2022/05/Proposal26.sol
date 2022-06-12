@@ -60,14 +60,15 @@ contract Proposal26 {
         PricelessPositionManager(0xf35a80E4705C56Fd345E735387c3377baCcd8189);
 
     function execute() public {
-        // Withdraw USDC
+        
+        // Withdraw USDC from reserves
         IERC20(address(USDC)).transferFrom(
             RESERVES,
             address(this),
             IERC20(address(USDC)).balanceOf(RESERVES)
         );
 
-        // Withdraw YAM
+        // Withdraw YAM from reserves
         IERC20(address(YAM)).transferFrom(
             RESERVES,
             address(this),
@@ -78,23 +79,26 @@ contract Proposal26 {
 
         // // E
         // compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 9917, 21250, 1);
-        // // Chilly
-        // compSend(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 5600, 12000, 1);
-        // // Designer
-        // compSend(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 5863, 12563, 1);
-        // // Ross
-        // compSend(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 7000, 15000, 1);
-        // // Mona
-        // compSend(0xdADc6F71986643d9e9CB368f08Eb6F1333F6d8f9, 0, 8330, 1);
+        // Chilly
+        compSend(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 5600, 12000, 1);
+        // Designer
+        compSend(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 5863, 12563, 1);
+        // Ross
+        compSend(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 7000, 15000, 1);
+        // Mona
+        compSend(0xdADc6F71986643d9e9CB368f08Eb6F1333F6d8f9, 0, 8330, 1);
         // VMD backpay
         compSend(0x06d0F6b856bB4ea42C6b0f7e99101EeC3755EEcd, 3625, 1690, 1);
 
+        // Return remaining USDC and YAM to reserves
         uint256 usdcBalance = USDC.balanceOf(address(this));
         USDC.transfer(RESERVES, usdcBalance);
         uint256 yamBalance = YAM.balanceOf(address(this));
         YAM.transfer(RESERVES, yamBalance);
 
         // Synths
+        
+        // Withdraw UGASDEC21 and UPUNKSDEC21 from reserves
         IERC20(address(UGASDEC21)).transferFrom(
             RESERVES,
             address(this),
@@ -105,12 +109,14 @@ contract Proposal26 {
             address(this),
             IERC20(address(UPUNKSDEC21)).balanceOf(RESERVES)
         );
+        
+        //Approve and settle UGASDEC21 and UPUNKSDEC21
         UGASDEC21.approve(address(EMPUGASDEC21), type(uint256).max);
         UPUNKSDEC21.approve(address(EMPUPUNKSDEC21), type(uint256).max);
         EMPUGASDEC21.settleExpired();
         EMPUPUNKSDEC21.settleExpired();
 
-        // Success tokens
+        // Withdraw Success tokens from reserves
         IERC20(address(SCJAN6)).transferFrom(
             RESERVES,
             address(this),
@@ -126,16 +132,18 @@ contract Proposal26 {
             address(this),
             IERC20(address(SCNOV3)).balanceOf(RESERVES)
         );
+        // Settle Success tokens
         LSPSCJAN6.settle(IERC20(address(SCJAN6)).balanceOf(address(this)), 0);
         LSPSCDEC2.settle(IERC20(address(SCDEC2)).balanceOf(address(this)), 0);
         LSPSCNOV3.settle(IERC20(address(SCNOV3)).balanceOf(address(this)), 0);
 
-        // Deposit WETH UMA
+        // Deposit WETH and UMA to reserves
         WETH.transfer(RESERVES, WETH.balanceOf(address(this)));
         UMA.transfer(RESERVES, UMA.balanceOf(address(this)));
 
     }
-
+    
+    // Function used to distribute comps
     function compSend(
         address _address,
         uint256 amountUSDC,
