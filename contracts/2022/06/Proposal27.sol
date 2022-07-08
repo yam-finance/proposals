@@ -4,22 +4,12 @@ pragma solidity 0.8.10;
 import {YAMTokenInterface} from "../../../utils/YAMTokenInterface.sol";
 import {IERC20} from "openzeppelin-contracts/token/ERC20/IERC20.sol";
 
-interface IYVault {
-    function deposit(uint256 amount, address recipient)
-        external
-        returns (uint256);
-
-    function withdraw(uint256 amount) external returns (uint256);
-}
-
 contract Proposal27 {
     /// @dev Contracts and ERC20 addresses
     IERC20 internal constant WETH =
         IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
     IERC20 internal constant YAM =
         IERC20(0x0AaCfbeC6a24756c20D41914F2caba817C0d8521);
-    IYVault internal constant yUSDC =
-        IYVault(0xa354F35829Ae975e850e23e9615b11Da1B3dC4DE);
     IERC20 internal constant USDC =
         IERC20(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
     address internal constant RESERVES =
