@@ -31,16 +31,6 @@ contract Proposal27test is YAMTest {
         0xD67c05523D8ec1c60760Fd017Ef006b9F6e496D0;
     address internal constant twoKeyContract =
         0x8348c5EC31D486e6E4207fC0B17a906A0806550d;
-    IERC20 internal constant UGASDEC21 =
-        IERC20(0xE3Df5e08b72704C23229cB92fe847B23BfDe9dBd);
-    IERC20 internal constant UPUNKSDEC21 =
-        IERC20(0x37a572b95d3FB5007a3519e73D4e9D6e0fc9De50);
-    IERC20 internal constant SCJAN6 =
-        IERC20(0x0B4470515228625ef51E6DB32699989046fCE4De);
-    IERC20 internal constant SCDEC2 =
-        IERC20(0xf447EF251De50E449107C8D687d10C91e0b7e4D4);
-    IERC20 internal constant SCNOV3 =
-        IERC20(0xff8f62855fD433347BbE62f1292F905f7aC1DF9d);
 
     function setUp() public {
         setUpYAMTest();
@@ -121,11 +111,6 @@ contract Proposal27test is YAMTest {
 
         // Reserves should have the USDC we should have
         assertTrue(IERC20(USDC).balanceOf(address(reserves)) > 1900000000);
-
-        // Reserves should have the synths success tokens we should have
-        assertEq(IERC20(SCJAN6).balanceOf(address(reserves)), 0);
-        assertEq(IERC20(SCDEC2).balanceOf(address(reserves)), 0);
-        assertEq(IERC20(SCNOV3).balanceOf(address(reserves)), 0);
 
         // No WETH, USDC or yUSDC should be left in the proposal
         assertEq(IERC20(WETH).balanceOf(address(proposal)), 0);
