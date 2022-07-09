@@ -98,7 +98,7 @@ contract Proposal27test is YAMTest {
 
         // Reserves should have the yam we should have
         assertTrue(
-            IERC20(YAM).balanceOf(address(reserves)) > 100000000000000000000000
+            IERC20(YAM).balanceOf(address(reserves)) > 90000000000000000000000
         );
 
         // Reserves should have the sushi rewards

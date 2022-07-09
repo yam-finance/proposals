@@ -45,12 +45,12 @@ contract Proposal27 {
 
         // E
         compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 9917, 29310, 1);
-        // // Chilly
-        // compSend(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 5600, 23103, 1);
+        // Chilly
+        compSend(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 7140, 21103, 1);
         // Designer
         compSend(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 7140, 21103, 1);
         // Ross
-        compSend(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 9004, 26611, 1);
+        compSend(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 8575, 25345, 1);
         // Mona
         compSend(0xdADc6F71986643d9e9CB368f08Eb6F1333F6d8f9, 0, 11490, 1);
 
