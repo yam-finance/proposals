@@ -50,7 +50,7 @@ contract Proposal28 {
         // // Chilly
         // compSend(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 7140, 0, 1);
         // Designer
-        compSend(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 7140, 0, 1);
+        compSend(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 6545, 0, 1);
         // Ross
         compSend(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 8575, 0, 1);
         // Mona
