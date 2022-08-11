@@ -45,10 +45,10 @@ contract Proposal28 {
 
         // Comp transfers
 
-        // // E
-        // compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 9917, 0, 1);
-        // // Chilly
-        // compSend(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 7140, 0, 1);
+        // E
+        compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 9917, 0, 1);
+        // Chilly
+        compSend(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 8092, 0, 1);
         // Designer
         compSend(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 6545, 0, 1);
         // Ross
