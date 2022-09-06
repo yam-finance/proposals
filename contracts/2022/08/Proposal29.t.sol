@@ -31,8 +31,6 @@ contract Proposal29test is YAMTest {
         IERC20(0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b);
     IERC20 internal constant GTC =
         IERC20(0xDe30da39c46104798bB5aA3fe8B9e0e1F348163F);
-    IERC20 internal constant UMA =
-        IERC20(0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828);
     IERC20 internal constant INDEX =
         IERC20(0x0954906da0Bf32d5479e25f46056d22f08464cab);
     IERC20 internal constant SUSHI =
@@ -60,19 +58,19 @@ contract Proposal29test is YAMTest {
     }
 
     function test_proposal_29() public {
-        address[] memory targets = new address[](7);
-        uint256[] memory values = new uint256[](7);
-        string[] memory signatures = new string[](7);
-        bytes[] memory calldatas = new bytes[](7);
+        address[] memory targets = new address[](5);
+        uint256[] memory values = new uint256[](5);
+        string[] memory signatures = new string[](5);
+        bytes[] memory calldatas = new bytes[](5);
         string
             memory description = "Contributors comps for August, opening new streams, yam previous payouts, treasury tokens rebalancing on multisig and claiming sushi for reserves.";
 
         // Whitelist proposal for withdrawals
         targets[0] = address(reserves);
         signatures[0] = "whitelistWithdrawals(address[],uint256[],address[])";
-        address[] memory whos = new address[](9);
-        uint256[] memory amounts = new uint256[](9);
-        address[] memory tokens = new address[](9);
+        address[] memory whos = new address[](8);
+        uint256[] memory amounts = new uint256[](8);
+        address[] memory tokens = new address[](8);
 
         whos[0] = address(proposal);
         amounts[0] = type(uint256).max;
@@ -92,23 +90,19 @@ contract Proposal29test is YAMTest {
 
         whos[4] = address(proposal);
         amounts[4] = type(uint256).max;
-        tokens[4] = address(UMA);
+        tokens[4] = address(INDEX);
 
         whos[5] = address(proposal);
         amounts[5] = type(uint256).max;
-        tokens[5] = address(INDEX);
+        tokens[5] = address(SUSHI);
 
         whos[6] = address(proposal);
         amounts[6] = type(uint256).max;
-        tokens[6] = address(SUSHI);
+        tokens[6] = address(XSUSHI);
 
         whos[7] = address(proposal);
         amounts[7] = type(uint256).max;
-        tokens[7] = address(XSUSHI);
-
-        whos[8] = address(proposal);
-        amounts[8] = type(uint256).max;
-        tokens[8] = address(ETHDPILP);
+        tokens[7] = address(ETHDPILP);
 
         calldatas[0] = abi.encode(whos, amounts, tokens);
 
@@ -120,7 +114,8 @@ contract Proposal29test is YAMTest {
         // Stream minting yam
         uint256 totalToMatchOld = (116647 * (10**18)) -
             IERC20(YAM).balanceOf(address(reserves));
-        uint256 totalToMatch = (19125 + 10413) * (10**18);
+        uint256 totalToMatch = (21038 + 19125 + 16047 + 39844 + 10413 + 21250) *
+            (10**18);
         targets[2] = address(yamV3);
         signatures[2] = "mint(address,uint256)";
         calldatas[2] = abi.encode(
@@ -128,31 +123,18 @@ contract Proposal29test is YAMTest {
             totalToMatchOld + totalToMatch
         );
 
-        // Withdraw all uma from twoKeyContract
-        targets[3] = address(twoKeyContract);
-        signatures[3] = "withdrawErc20(address,uint256)";
-        calldatas[3] = abi.encode(
-            address(UMA),
-            IERC20(address(UMA)).balanceOf(address(twoKeyContract))
-        );
-
-        // Transfer uma to reserves
-        targets[4] = address(UMA);
-        signatures[4] = "transfer(address,uint256)";
-        calldatas[4] = abi.encode(address(RESERVES), 41857958515969183997479);
-
         // Transfer index to reserves
-        targets[5] = address(INDEX);
-        signatures[5] = "transfer(address,uint256)";
-        calldatas[5] = abi.encode(
+        targets[3] = address(INDEX);
+        signatures[3] = "transfer(address,uint256)";
+        calldatas[3] = abi.encode(
             address(RESERVES),
             IERC20(address(INDEX)).balanceOf(address(timelock))
         );
 
         // Whitelist proposal for ethdpiStaking
-        targets[6] = address(ethdpiStaking);
-        signatures[6] = "setIsSubGov(address,bool)";
-        calldatas[6] = abi.encode(address(proposal), true);
+        targets[4] = address(ethdpiStaking);
+        signatures[4] = "setIsSubGov(address,bool)";
+        calldatas[4] = abi.encode(address(proposal), true);
 
         // Get quorum for test proposal
         getQuorum(yamV3, proposer);
@@ -166,22 +148,15 @@ contract Proposal29test is YAMTest {
         proposal.executeStreams();
         ff(61 minutes);
 
-        // Multisig should have a portion of the DPI
-        assertEq(
-            IERC20(DPI).balanceOf(address(MULTISIG)),
-            2050000000000000000000
+        // Multisig should have all the DPI
+        assertTrue(
+            IERC20(DPI).balanceOf(address(MULTISIG)) > 3200000000000000000000
         );
 
         // Multisig should have all the GTC
         assertEq(
             IERC20(GTC).balanceOf(address(MULTISIG)),
             5817000000000000000000
-        );
-
-        // Multisig should have all the UMA
-        assertEq(
-            IERC20(UMA).balanceOf(address(MULTISIG)),
-            41857958515969183997479
         );
 
         // Multisig should have all the INDEX
@@ -210,8 +185,8 @@ contract Proposal29test is YAMTest {
         // Reserves should have the sushi we should have
         assertEq(IERC20(SUSHI).balanceOf(address(reserves)), 0);
 
-        // // Reserves should have the USDC we should have
-        // assertTrue(IERC20(USDC).balanceOf(address(reserves)) > 65000000000);
+        // Reserves should have the USDC we should have
+        assertTrue(IERC20(USDC).balanceOf(address(reserves)) > 72000000000);
 
         // Reserves should have the yUSDC we should have
         assertTrue(IERC20(yUSDC).balanceOf(address(reserves)) > 1430000000000);
@@ -226,7 +201,6 @@ contract Proposal29test is YAMTest {
         assertEq(IERC20(yUSDC).balanceOf(address(proposal)), 0);
         assertEq(IERC20(DPI).balanceOf(address(proposal)), 0);
         assertEq(IERC20(GTC).balanceOf(address(proposal)), 0);
-        assertEq(IERC20(UMA).balanceOf(address(proposal)), 0);
         assertEq(IERC20(INDEX).balanceOf(address(proposal)), 0);
         assertEq(IERC20(SUSHI).balanceOf(address(proposal)), 0);
         assertEq(IERC20(XSUSHI).balanceOf(address(proposal)), 0);

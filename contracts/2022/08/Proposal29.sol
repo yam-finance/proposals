@@ -36,8 +36,6 @@ contract Proposal29 {
         IERC20(0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b);
     IERC20 internal constant GTC =
         IERC20(0xDe30da39c46104798bB5aA3fe8B9e0e1F348163F);
-    IERC20 internal constant UMA =
-        IERC20(0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828);
     IERC20 internal constant INDEX =
         IERC20(0x0954906da0Bf32d5479e25f46056d22f08464cab);
     IERC20 internal constant SUSHI =
@@ -78,9 +76,8 @@ contract Proposal29 {
         ethdpiStaking._getTokenFromHere(address(ETHDPILP));
 
         // Withdraw to multisig
-        withdrawToken(address(DPI), MULTISIG, 2050 * (10**18));
+        withdrawToken(address(DPI), MULTISIG, IERC20(DPI).balanceOf(RESERVES));
         withdrawToken(address(GTC), MULTISIG, IERC20(GTC).balanceOf(RESERVES));
-        withdrawToken(address(UMA), MULTISIG, IERC20(UMA).balanceOf(RESERVES));
         withdrawToken(
             address(INDEX),
             MULTISIG,
@@ -106,14 +103,14 @@ contract Proposal29 {
 
         // // E
         // compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 8000, 31250, 1);
-        // // Chilly
-        // compSend(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 8092, 25500, 1);
-        // Designer
-        compSend(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 7140, 20625, 1);
+        // Chilly
+        compSend(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 7854, 25500, 1);
+        // // Designer
+        // compSend(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 7140, 20625, 1);
         // // Ross
-        // compSend(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 8575, 27022, 1);
+        // compSend(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 4008, 27022, 1);
         // // Feddas
-        // compSend(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 3000, 0, 1);
+        // compSend(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 8925, 0, 1);
         // Mona
         compSend(0xdADc6F71986643d9e9CB368f08Eb6F1333F6d8f9, 0, 12250, 1);
 
@@ -134,18 +131,18 @@ contract Proposal29 {
 
         // // E
         // compStream(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 37500);
-        // // Chilly
-        // compStream(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 19940);
-        // Designer
-        compStream(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 19125);
+        // Chilly
+        compStream(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 21038);
+        // // Designer
+        // compStream(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 19125);
         // // Ross
-        // compStream(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 17857);
+        // compStream(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 16047);
         // // Feddas
-        // compStream(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 3000);
+        // compStream(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 39844);
         // Mona
         compStream(0xdADc6F71986643d9e9CB368f08Eb6F1333F6d8f9, 10413);
         // // Jpgs
-        // compStream(0x653d63E4F2D7112a19f5Eb993890a3F27b48aDa5, 10625);
+        // compStream(0x653d63E4F2D7112a19f5Eb993890a3F27b48aDa5, 21250);
 
         // Burn leftovers
         YAMV3.burn(YAM.balanceOf(address(this)));
@@ -177,6 +174,16 @@ contract Proposal29 {
 
     // Function to open steams
     function compStream(address _address, uint256 amountYAM) internal {
-        if (amountYAM > 0) {}
+        if (amountYAM > 0) {
+            uint256 stream = uint256(amountYAM * (10**18));
+            uint256 streamOut = (uint256(stream) / 12960000) * 12960000;
+            Sablier.createStream(
+                _address,
+                streamOut,
+                address(YAM),
+                block.timestamp + 900,
+                block.timestamp + 900 + 12960000
+            );
+        }
     }
 }
