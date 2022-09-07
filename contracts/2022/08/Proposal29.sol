@@ -105,12 +105,12 @@ contract Proposal29 {
         // compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 8000, 31250, 1);
         // Chilly
         compSend(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 7854, 25500, 1);
-        // // Designer
-        // compSend(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 7140, 20625, 1);
-        // // Ross
-        // compSend(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 4008, 27022, 1);
-        // // Feddas
-        // compSend(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 8925, 0, 1);
+        // Designer
+        compSend(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 7140, 20625, 1);
+        // Ross
+        compSend(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 4008, 27022, 1);
+        // Feddas
+        compSend(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 8925, 0, 1);
         // Mona
         compSend(0xdADc6F71986643d9e9CB368f08Eb6F1333F6d8f9, 0, 12250, 1);
 
@@ -133,16 +133,16 @@ contract Proposal29 {
         // compStream(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 37500);
         // Chilly
         compStream(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 21038);
-        // // Designer
-        // compStream(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 19125);
-        // // Ross
-        // compStream(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 16047);
-        // // Feddas
-        // compStream(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 39844);
+        // Designer
+        compStream(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 19125);
+        // Ross
+        compStream(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 16047);
+        // Feddas
+        compStream(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 39844);
         // Mona
         compStream(0xdADc6F71986643d9e9CB368f08Eb6F1333F6d8f9, 10413);
-        // // Jpgs
-        // compStream(0x653d63E4F2D7112a19f5Eb993890a3F27b48aDa5, 21250);
+        // Jpgs
+        compStream(0x653d63E4F2D7112a19f5Eb993890a3F27b48aDa5, 21250);
 
         // Burn leftovers
         YAMV3.burn(YAM.balanceOf(address(this)));
