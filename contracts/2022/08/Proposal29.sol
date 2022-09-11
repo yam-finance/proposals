@@ -101,8 +101,8 @@ contract Proposal29 {
 
         // Comp transfers
 
-        // // E
-        // compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 8000, 31250, 1);
+        // E
+        compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 0, 31250, 1);
         // Chilly
         compSend(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 7854, 25500, 1);
         // Designer
@@ -130,7 +130,7 @@ contract Proposal29 {
         // Yam streams
 
         // // E
-        // compStream(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 37500);
+        // compStream(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 50000);
         // Chilly
         compStream(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 21038);
         // Designer
@@ -176,13 +176,13 @@ contract Proposal29 {
     function compStream(address _address, uint256 amountYAM) internal {
         if (amountYAM > 0) {
             uint256 stream = uint256(amountYAM * (10**18));
-            uint256 streamOut = (uint256(stream) / 12960000) * 12960000;
+            uint256 streamOut = (uint256(stream) / 15778500) * 15778500;
             Sablier.createStream(
                 _address,
                 streamOut,
                 address(YAM),
                 block.timestamp + 900,
-                block.timestamp + 900 + 12960000
+                block.timestamp + 900 + 15778500
             );
         }
     }
