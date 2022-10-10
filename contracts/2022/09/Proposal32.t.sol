@@ -14,6 +14,12 @@ interface YYCRV {
     function withdraw(uint256 shares) external;
 }
 
+interface IIncentivizer {
+    function breaker() external view returns (bool);
+
+    function setBreaker(bool breaker_) external;
+}
+
 contract Proposaltest is YAMTest {
     Proposal32 private proposal;
 
@@ -25,6 +31,8 @@ contract Proposaltest is YAMTest {
         IERC20(0x0F82E57804D0B1F6FAb2370A43dcFAd3c7cB239c);
     IERC20 internal constant SUSHI =
         IERC20(0x6B3595068778DD592e39A122f4f5a5cF09C90fE2);
+    IIncentivizer incentivizer =
+        IIncentivizer(0xD67c05523D8ec1c60760Fd017Ef006b9F6e496D0);
     ISablier internal constant Sablier =
         ISablier(0xCD18eAa163733Da39c232722cBC4E8940b1D8888);
     address internal constant RESERVES =
@@ -40,10 +48,10 @@ contract Proposaltest is YAMTest {
     }
 
     function test_proposal_32() public {
-        address[] memory targets = new address[](3);
-        uint256[] memory values = new uint256[](3);
-        string[] memory signatures = new string[](3);
-        bytes[] memory calldatas = new bytes[](3);
+        address[] memory targets = new address[](4);
+        uint256[] memory values = new uint256[](4);
+        string[] memory signatures = new string[](4);
+        bytes[] memory calldatas = new bytes[](4);
         string
             memory description = "Contributors comps for September, creating protocol owned liquidity and claiming sushi for reserves.";
 
@@ -75,6 +83,11 @@ contract Proposaltest is YAMTest {
         signatures[2] = "mint(address,uint256)";
         calldatas[2] = abi.encode(address(proposal), totalToMatch);
 
+        // Stop incentivizer rewards
+        targets[3] = address(INCENTIVIZER);
+        signatures[3] = "setBreaker(bool)";
+        calldatas[3] = abi.encode(true);
+
         // Get quorum for test proposal
         getQuorum(yamV3, proposer);
         bing();
@@ -92,6 +105,9 @@ contract Proposaltest is YAMTest {
             219047619047619040000
         );
         ff(61 minutes);
+
+        // Incentivizer rewards should be stopped
+        assertTrue(incentivizer.breaker() == true);
 
         // Reserves should have the YAMSLP we should have
         assertTrue(
