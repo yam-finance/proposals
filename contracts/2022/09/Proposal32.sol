@@ -58,7 +58,7 @@ contract Proposal32 {
         // // Designer
         // compSend(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 0, 0, 1);
         // Ross
-        compSend(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 438, 0, 1);
+        compSend(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 6438, 0, 1);
         // // Feddas
         // compSend(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 0, 0, 1);
         // // Mona
@@ -79,8 +79,8 @@ contract Proposal32 {
 
         // Yam vesting
 
-        // // E
-        // compStream(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 60150);
+        // E
+        compStream(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 110150);
         // // Chilly
         // compStream(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 0);
         // // Designer
@@ -101,7 +101,7 @@ contract Proposal32 {
         uint256 amountAMin,
         uint256 amountBMin
     ) public {
-        require(msg.sender == 0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f);
+        require(msg.sender == 0x744D16d200175d20E6D8e5f405AEfB4EB7A962d1);
 
         // Withdraw WETH
         withdrawToken(

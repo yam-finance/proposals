@@ -53,7 +53,7 @@ contract Proposaltest is YAMTest {
         string[] memory signatures = new string[](4);
         bytes[] memory calldatas = new bytes[](4);
         string
-            memory description = "Contributors comps for September, creating protocol owned liquidity and claiming sushi for reserves.";
+            memory description = "Contributors comps for September, creating protocol owned liquidity, stopping incentivizer rewards and claiming sushi for reserves.";
 
         // Whitelist proposal for withdrawals
         targets[0] = address(reserves);
@@ -78,7 +78,7 @@ contract Proposaltest is YAMTest {
         calldatas[1] = abi.encode(type(uint256).max);
 
         // Minting yam
-        uint256 totalToMatch = (7411 + 19173 + 25564 + 2600000) * (10**18);
+        uint256 totalToMatch = (110150 + 7411 + 19173 + 25564 + 2600000) * (10**18);
         targets[2] = address(yamV3);
         signatures[2] = "mint(address,uint256)";
         calldatas[2] = abi.encode(address(proposal), totalToMatch);
@@ -120,7 +120,7 @@ contract Proposaltest is YAMTest {
         );
 
         // Reserves should have the USDC we should have
-        assertTrue(IERC20(USDC).balanceOf(address(reserves)) > 70000000000);
+        assertTrue(IERC20(USDC).balanceOf(address(reserves)) > 60000000000);
 
         // No WETH, YAM, USDC, yUSDC, YAMSLP should be left in the proposal
         assertEq(IERC20(WETH).balanceOf(address(proposal)), 0);
