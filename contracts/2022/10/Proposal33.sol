@@ -34,6 +34,10 @@ contract Proposal33 {
         IERC20(0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b);
     IERC20 internal constant ystETH =
         IERC20(0xdCD90C7f6324cfa40d7169ef80b12031770B4325);
+    IERC20 internal constant UMA =
+        IERC20(0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828);
+    IERC20 internal constant INDEX =
+        IERC20(0x0954906da0Bf32d5479e25f46056d22f08464cab);
     ISablier internal constant Sablier =
         ISablier(0xCD18eAa163733Da39c232722cBC4E8940b1D8888);
 
@@ -63,6 +67,11 @@ contract Proposal33 {
             address(YAMSLP),
             address(this),
             IERC20(YAMSLP).balanceOf(RESERVES)
+        );
+        withdrawToken(
+            address(YAM),
+            address(this),
+            IERC20(YAM).balanceOf(RESERVES)
         );
 
         // Comp transfers
@@ -125,6 +134,16 @@ contract Proposal33 {
             address(ystETH),
             address(Redeemer),
             IERC20(ystETH).balanceOf(RESERVES)
+        );
+        withdrawToken(
+            address(UMA),
+            address(Redeemer),
+            IERC20(UMA).balanceOf(RESERVES)
+        );
+        withdrawToken(
+            address(INDEX),
+            address(Redeemer),
+            IERC20(INDEX).balanceOf(RESERVES)
         );
 
         executeStep++;
