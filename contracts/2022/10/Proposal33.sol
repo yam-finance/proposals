@@ -57,6 +57,8 @@ contract Proposal33 {
     uint8 executeStep = 0;
 
     function execute() public {
+        require(executeStep == 0);
+
         // Withdraw tokens
         withdrawToken(
             address(USDC),
@@ -100,7 +102,7 @@ contract Proposal33 {
             address(WETH),
             2110697802301048,
             1000000000000000000000000,
-            180000000000000000000,
+            100000000000000000000,
             address(this),
             block.timestamp + 500
         );
@@ -163,8 +165,8 @@ contract Proposal33 {
         // compStream(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 7411);
         // // Feddas
         // compStream(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 19173);
-        // // Jpgs
-        // compStream(0x653d63E4F2D7112a19f5Eb993890a3F27b48aDa5, 25564);
+        // Jpgs
+        compStream(0x653d63E4F2D7112a19f5Eb993890a3F27b48aDa5, 9392);
 
         // Burn leftovers
         YAMV3.burn(YAM.balanceOf(address(this)));

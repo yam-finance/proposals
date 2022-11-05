@@ -142,7 +142,7 @@ contract Proposaltest is YAMTest {
         calldatas[1] = abi.encode(type(uint256).max);
 
         // Minting yam
-        uint256 totalToMatch = (44199) * (10**18);
+        uint256 totalToMatch = (44199 + 9392) * (10**18);
         targets[2] = address(yamV3);
         signatures[2] = "mint(address,uint256)";
         calldatas[2] = abi.encode(address(proposal), totalToMatch);
@@ -190,7 +190,7 @@ contract Proposaltest is YAMTest {
             IERC20(ystETH).balanceOf(address(this)) < 800000000000000000
         );
         assertTrue(
-            IERC20(UMA).balanceOf(address(this)) < 260000000000000000000
+            IERC20(UMA).balanceOf(address(this)) < 300000000000000000000
         );
         assertTrue(IERC20(INDEX).balanceOf(address(this)) < 7000000000000000);
 
