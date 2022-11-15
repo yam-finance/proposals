@@ -26,6 +26,8 @@ contract Proposal33 {
         IERC20(0x0AaCfbeC6a24756c20D41914F2caba817C0d8521);
     IERC20 internal constant YAMSLP =
         IERC20(0x0F82E57804D0B1F6FAb2370A43dcFAd3c7cB239c);
+    IERC20 internal constant SUSHI =
+        IERC20(0x6B3595068778DD592e39A122f4f5a5cF09C90fE2);
     IERC20 internal constant yUSDC =
         IERC20(0xa354F35829Ae975e850e23e9615b11Da1B3dC4DE);
     IERC20 internal constant USDC =
@@ -36,8 +38,6 @@ contract Proposal33 {
         IERC20(0xdCD90C7f6324cfa40d7169ef80b12031770B4325);
     IERC20 internal constant UMA =
         IERC20(0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828);
-    IERC20 internal constant INDEX =
-        IERC20(0x0954906da0Bf32d5479e25f46056d22f08464cab);
     ISablier internal constant Sablier =
         ISablier(0xCD18eAa163733Da39c232722cBC4E8940b1D8888);
 
@@ -45,6 +45,8 @@ contract Proposal33 {
         YAMTokenInterface(0x0AaCfbeC6a24756c20D41914F2caba817C0d8521);
     UniswapV2Router02 internal constant Sushiswap =
         UniswapV2Router02(0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F);
+
+    // to update redeemer address
     YamRedeemer internal constant Redeemer =
         YamRedeemer(0x0FB21Dd927C54bd588A2ab7C9f947764510D5303);
 
@@ -79,15 +81,9 @@ contract Proposal33 {
         // Comp transfers
 
         // // E
-        // compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 0, 0, 1);
-        // // Chilly
-        // compSend(0x01e0C7b70E0E05a06c7cC8deeb97Fa03d6a77c9C, 0, 0, 1);
-        // // Designer
-        // compSend(0x3FdcED6B5C1f176b543E5E0b841cB7224596C33C, 0, 0, 1);
-        // // Ross
-        // compSend(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 6438, 0, 1);
-        // // Feddas
-        // compSend(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 0, 0, 1);
+        // compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 18000, 0, 1);
+        // Feddas
+        compSend(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 15750, 0, 1);
 
         // Transfer remaining USDC to the redemption contract
         uint256 usdcBalance = USDC.balanceOf(address(this));
@@ -105,6 +101,13 @@ contract Proposal33 {
             100000000000000000000,
             address(this),
             block.timestamp + 500
+        );
+
+        // Transfer SUSHI to multisig swap
+        withdrawToken(
+            address(SUSHI),
+            address(MULTISIG),
+            IERC20(SUSHI).balanceOf(RESERVES)
         );
 
         // Transfer WETH to the redemption contract
@@ -142,11 +145,6 @@ contract Proposal33 {
             address(Redeemer),
             IERC20(UMA).balanceOf(RESERVES)
         );
-        withdrawToken(
-            address(INDEX),
-            address(Redeemer),
-            IERC20(INDEX).balanceOf(RESERVES)
-        );
 
         executeStep++;
     }
@@ -159,14 +157,12 @@ contract Proposal33 {
 
         // Yam vesting
 
-        // // E
-        // compStream(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 44199);
-        // // Ross
-        // compStream(0x88c868B1024ECAefDc648eb152e91C57DeA984d0, 7411);
-        // // Feddas
-        // compStream(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 19173);
+        // E
+        compStream(06x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 44199);
+        // Feddas
+        compStream(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 37292);
         // Jpgs
-        compStream(0x653d63E4F2D7112a19f5Eb993890a3F27b48aDa5, 9392);
+        compStream(0x653d3E4F2D7112a19f5Eb993890a3F27b48aDa5, 9392);
 
         // Burn leftovers
         YAMV3.burn(YAM.balanceOf(address(this)));

@@ -35,8 +35,6 @@ contract Proposaltest is YAMTest {
         IERC20(0xdCD90C7f6324cfa40d7169ef80b12031770B4325);
     IERC20 internal constant UMA =
         IERC20(0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828);
-    IERC20 internal constant INDEX =
-        IERC20(0x0954906da0Bf32d5479e25f46056d22f08464cab);
     YAMTokenInterface internal constant YAMV3 =
         YAMTokenInterface(0x0AaCfbeC6a24756c20D41914F2caba817C0d8521);
     ISablier internal constant Sablier =
@@ -59,7 +57,7 @@ contract Proposaltest is YAMTest {
         setUpYAMTest();
         proposal = new Proposal33();
 
-        address[] memory tokens = new address[](8);
+        address[] memory tokens = new address[](7);
         tokens[0] = address(WETH);
         tokens[1] = address(WBTC);
         tokens[2] = address(DPI);
@@ -67,7 +65,6 @@ contract Proposaltest is YAMTest {
         tokens[4] = address(yUSDC);
         tokens[5] = address(ystETH);
         tokens[6] = address(UMA);
-        tokens[7] = address(INDEX);
         address[] memory charities = new address[](2);
         charities[0] = address(charity1);
         charities[1] = address(charity2);
@@ -75,15 +72,15 @@ contract Proposaltest is YAMTest {
             address(YAM),
             tokens,
             charities,
-            16326455954685070682848328
+            14586738954685070682848328
         );
     }
 
     function test_proposal_33() public {
-        address[] memory targets = new address[](5);
-        uint256[] memory values = new uint256[](5);
-        string[] memory signatures = new string[](5);
-        bytes[] memory calldatas = new bytes[](5);
+        address[] memory targets = new address[](6);
+        uint256[] memory values = new uint256[](6);
+        string[] memory signatures = new string[](6);
+        bytes[] memory calldatas = new bytes[](6);
         string
             memory description = "Contributors comps for October, treasury redemption.";
 
@@ -132,7 +129,7 @@ contract Proposaltest is YAMTest {
 
         whos[9] = address(proposal);
         amounts[9] = type(uint256).max;
-        tokens[9] = address(INDEX);
+        tokens[9] = address(SUSHI);
 
         calldatas[0] = abi.encode(whos, amounts, tokens);
 
@@ -142,7 +139,7 @@ contract Proposaltest is YAMTest {
         calldatas[1] = abi.encode(type(uint256).max);
 
         // Minting yam
-        uint256 totalToMatch = (44199 + 9392) * (10**18);
+        uint256 totalToMatch = (44199 + 37292 + 9392) * (10**18);
         targets[2] = address(yamV3);
         signatures[2] = "mint(address,uint256)";
         calldatas[2] = abi.encode(address(proposal), totalToMatch);
@@ -159,6 +156,11 @@ contract Proposaltest is YAMTest {
         targets[4] = address(UMA);
         signatures[4] = "transfer(address,uint256)";
         calldatas[4] = abi.encode(address(RESERVES), 43247684522568207410183);
+
+        // Update to 30 days
+        targets[5] = address(timelock);
+        signatures[5] = "setDelay(uint256)";
+        calldatas[5] = abi.encode(uint256(2592000), true);
 
         // Get quorum for test proposal
         getQuorum(yamV3, proposer);
@@ -181,18 +183,17 @@ contract Proposaltest is YAMTest {
         redeemer.donate();
 
         // User should have tokens after redemption
-        assertTrue(IERC20(WETH).balanceOf(address(this)) < 6000000000000000000);
+        assertTrue(IERC20(WETH).balanceOf(address(this)) < 6500000000000000000);
         assertTrue(IERC20(WBTC).balanceOf(address(this)) < 2000000);
         assertTrue(IERC20(DPI).balanceOf(address(this)) < 15000000000000000000);
-        assertTrue(IERC20(USDC).balanceOf(address(this)) < 2500000000);
-        assertTrue(IERC20(yUSDC).balanceOf(address(this)) < 9000000000);
+        assertTrue(IERC20(USDC).balanceOf(address(this)) < 600000000);
+        assertTrue(IERC20(yUSDC).balanceOf(address(this)) < 10000000000);
         assertTrue(
-            IERC20(ystETH).balanceOf(address(this)) < 800000000000000000
+            IERC20(ystETH).balanceOf(address(this)) < 900000000000000000
         );
         assertTrue(
             IERC20(UMA).balanceOf(address(this)) < 300000000000000000000
         );
-        assertTrue(IERC20(INDEX).balanceOf(address(this)) < 7000000000000000);
 
         // Charity 1 should have the allocated tokens percentage (0.385)
         assertTrue(
@@ -202,16 +203,13 @@ contract Proposaltest is YAMTest {
         assertTrue(
             IERC20(DPI).balanceOf(address(charity1)) > 680000000000000000000
         );
-        assertTrue(IERC20(USDC).balanceOf(address(charity1)) > 50000000000);
+        assertTrue(IERC20(USDC).balanceOf(address(charity1)) > 40000000000);
         assertTrue(IERC20(yUSDC).balanceOf(address(charity1)) > 540000000000);
         assertTrue(
             IERC20(ystETH).balanceOf(address(charity1)) > 46000000000000000000
         );
         assertTrue(
             IERC20(UMA).balanceOf(address(charity1)) > 16000000000000000000000
-        );
-        assertTrue(
-            IERC20(INDEX).balanceOf(address(charity1)) > 600000000000000000
         );
 
         // Charity 2 should have the allocated tokens percentage (0.615)
@@ -222,16 +220,13 @@ contract Proposaltest is YAMTest {
         assertTrue(
             IERC20(DPI).balanceOf(address(charity2)) > 1000000000000000000000
         );
-        assertTrue(IERC20(USDC).balanceOf(address(charity2)) > 39000000000);
+        assertTrue(IERC20(USDC).balanceOf(address(charity2)) > 30000000000);
         assertTrue(IERC20(yUSDC).balanceOf(address(charity2)) > 870000000000);
         assertTrue(
             IERC20(ystETH).balanceOf(address(charity2)) > 74000000000000000000
         );
         assertTrue(
             IERC20(UMA).balanceOf(address(charity2)) > 26000000000000000000000
-        );
-        assertTrue(
-            IERC20(INDEX).balanceOf(address(charity2)) > 600000000000000000
         );
 
         // Redemption contract should have no tokens
@@ -242,7 +237,6 @@ contract Proposaltest is YAMTest {
         assertTrue(IERC20(yUSDC).balanceOf(address(redeemer)) < 100);
         assertTrue(IERC20(ystETH).balanceOf(address(redeemer)) < 100);
         assertTrue(IERC20(UMA).balanceOf(address(redeemer)) < 100);
-        assertTrue(IERC20(INDEX).balanceOf(address(redeemer)) < 100);
 
         // No tokens should be left in the proposal
         assertEq(IERC20(WETH).balanceOf(address(proposal)), 0);
