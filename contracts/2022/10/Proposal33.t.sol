@@ -6,8 +6,10 @@ import {IERC20} from "openzeppelin-contracts/token/ERC20/IERC20.sol";
 import {ISablier} from "../../../utils/Sablier.sol";
 import {YAMDelegate3} from "../../../utils/YAMDelegate3.sol";
 import {YAMTokenInterface} from "../../../utils/YAMTokenInterface.sol";
+import {TreasuryRedeemForever} from "./RedeemForever/TreasuryRedeemForever.sol";
+import {TreasuryRedeemDonate} from "./RedeemDonate/TreasuryRedeemDonate.sol";
+import {TreasuryRedeemTemporary} from "./RedeemTemporary (risk for the dao)/TreasuryRedeemTemporary.sol";
 import {Proposal33} from "./Proposal33.sol";
-import {YamRedeemer} from "./TreasuryRedeem.sol";
 
 interface YYCRV {
     function deposit(uint256 _amount) external;
@@ -17,7 +19,10 @@ interface YYCRV {
 
 contract Proposaltest is YAMTest {
     Proposal33 private proposal;
-    YamRedeemer private redeemer;
+
+    TreasuryRedeemForever private redeemer;
+    // TreasuryRedeemDonate private redeemer;
+    // TreasuryRedeemTemporary private redeemer;
 
     IERC20 internal constant WETH =
         IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
@@ -65,15 +70,39 @@ contract Proposaltest is YAMTest {
         tokens[4] = address(yUSDC);
         tokens[5] = address(ystETH);
         tokens[6] = address(UMA);
-        address[] memory charities = new address[](2);
-        charities[0] = address(charity1);
-        charities[1] = address(charity2);
-        redeemer = new YamRedeemer(
+
+        // Redemption
+
+        // Redeem Forever
+        redeemer = new TreasuryRedeemForever(
             address(YAM),
             tokens,
-            charities,
             14586738954685070682848328
         );
+
+        // // Redeem Donate
+        // address[] memory charities = new address[](2);
+        // charities[0] = address(charity1);
+        // charities[1] = address(charity2);
+        // uint256[] memory charitiesRatios = new uint256[](2);
+        // charitiesRatios[0] = 0.5 ether;
+        // charitiesRatios[1] = 0.5 ether;
+        // redeemer = new TreasuryRedeemDonate(
+        //     address(YAM),
+        //     tokens,
+        //     14586738954685070682848328,
+        //     charities,
+        //     charitiesRatios,
+        //     365 days
+        // );
+
+        // // Redeem Temporary
+        // redeemer = new TreasuryRedeemTemporary(
+        //     address(YAM),
+        //     tokens,
+        //     14586738954685070682848328,
+        //     365 days
+        // );
     }
 
     function test_proposal_33() public {
@@ -82,7 +111,7 @@ contract Proposaltest is YAMTest {
         string[] memory signatures = new string[](6);
         bytes[] memory calldatas = new bytes[](6);
         string
-            memory description = "Contributors comps for October, treasury redemption.";
+            memory description = "Open treasury redemption forever, contributor comps for october.";
 
         // Whitelist proposal for withdrawals
         targets[0] = address(reserves);
@@ -139,7 +168,7 @@ contract Proposaltest is YAMTest {
         calldatas[1] = abi.encode(type(uint256).max);
 
         // Minting yam
-        uint256 totalToMatch = (44199 + 37292 + 9392) * (10**18);
+        uint256 totalToMatch = (9392) * (10 ** 18);
         targets[2] = address(yamV3);
         signatures[2] = "mint(address,uint256)";
         calldatas[2] = abi.encode(address(proposal), totalToMatch);
@@ -176,17 +205,13 @@ contract Proposaltest is YAMTest {
 
         // Approve Redeemer and redeem 100k YAM
         YAM.approve(address(redeemer), type(uint256).max);
-        redeemer.redeem(address(this), 100000 * (10**18));
-
-        // Charity donation
-        ff(366 days);
-        redeemer.donate();
+        redeemer.redeem(address(this), 100000 * (10 ** 18));
 
         // User should have tokens after redemption
         assertTrue(IERC20(WETH).balanceOf(address(this)) < 6500000000000000000);
         assertTrue(IERC20(WBTC).balanceOf(address(this)) < 2000000);
         assertTrue(IERC20(DPI).balanceOf(address(this)) < 15000000000000000000);
-        assertTrue(IERC20(USDC).balanceOf(address(this)) < 600000000);
+        assertTrue(IERC20(USDC).balanceOf(address(this)) < 700000000);
         assertTrue(IERC20(yUSDC).balanceOf(address(this)) < 10000000000);
         assertTrue(
             IERC20(ystETH).balanceOf(address(this)) < 900000000000000000
@@ -195,48 +220,13 @@ contract Proposaltest is YAMTest {
             IERC20(UMA).balanceOf(address(this)) < 300000000000000000000
         );
 
-        // Charity 1 should have the allocated tokens percentage (0.385)
-        assertTrue(
-            IERC20(WETH).balanceOf(address(charity1)) > 300000000000000000000
-        );
-        assertTrue(IERC20(WBTC).balanceOf(address(charity1)) > 78000000);
-        assertTrue(
-            IERC20(DPI).balanceOf(address(charity1)) > 680000000000000000000
-        );
-        assertTrue(IERC20(USDC).balanceOf(address(charity1)) > 40000000000);
-        assertTrue(IERC20(yUSDC).balanceOf(address(charity1)) > 540000000000);
-        assertTrue(
-            IERC20(ystETH).balanceOf(address(charity1)) > 46000000000000000000
-        );
-        assertTrue(
-            IERC20(UMA).balanceOf(address(charity1)) > 16000000000000000000000
-        );
+        // // donate after `_redeemLength` time period passes
+        // ff(370 days);
+        // redeemer.donate();
 
-        // Charity 2 should have the allocated tokens percentage (0.615)
-        assertTrue(
-            IERC20(WETH).balanceOf(address(charity2)) > 510000000000000000000
-        );
-        assertTrue(IERC20(WBTC).balanceOf(address(charity2)) > 120000000);
-        assertTrue(
-            IERC20(DPI).balanceOf(address(charity2)) > 1000000000000000000000
-        );
-        assertTrue(IERC20(USDC).balanceOf(address(charity2)) > 30000000000);
-        assertTrue(IERC20(yUSDC).balanceOf(address(charity2)) > 870000000000);
-        assertTrue(
-            IERC20(ystETH).balanceOf(address(charity2)) > 74000000000000000000
-        );
-        assertTrue(
-            IERC20(UMA).balanceOf(address(charity2)) > 26000000000000000000000
-        );
-
-        // Redemption contract should have no tokens
-        assertTrue(IERC20(WETH).balanceOf(address(redeemer)) < 100);
-        assertTrue(IERC20(WBTC).balanceOf(address(redeemer)) < 100);
-        assertTrue(IERC20(DPI).balanceOf(address(redeemer)) < 100);
-        assertTrue(IERC20(USDC).balanceOf(address(redeemer)) < 100);
-        assertTrue(IERC20(yUSDC).balanceOf(address(redeemer)) < 100);
-        assertTrue(IERC20(ystETH).balanceOf(address(redeemer)) < 100);
-        assertTrue(IERC20(UMA).balanceOf(address(redeemer)) < 100);
+        // // returnToReserves after `_redeemLength` time period passes
+        // ff(370 days);
+        // redeemer.returnToReserves();
 
         // No tokens should be left in the proposal
         assertEq(IERC20(WETH).balanceOf(address(proposal)), 0);

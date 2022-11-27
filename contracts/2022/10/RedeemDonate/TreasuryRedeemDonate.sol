@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-pragma solidity 0.8.10;
+pragma solidity ^0.8.4;
 
 import {IERC20, SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -7,7 +7,7 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.
 /// @title contract used to redeem a list of tokens, by permanently
 /// taking another token out of circulation.
 /// @author Yam Protocol
-contract YamRedeemer is ReentrancyGuard {
+contract TreasuryRedeemDonate is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     /// @notice event to track redemptions
@@ -24,9 +24,6 @@ contract YamRedeemer is ReentrancyGuard {
     /// @notice token to redeem
     address public immutable _redeemedToken;
 
-    /// @notice charities to receive donations
-    address[] private _charities;
-
     /// @notice tokens to receive when redeeming
     address[] private _tokensReceived;
 
@@ -35,37 +32,40 @@ contract YamRedeemer is ReentrancyGuard {
     /// they will receive all the balances of each `_tokensReceived` held on this contract.
     uint256 public _redeemBase;
 
-    /// @notice time contract was deployed
+    /// @notice deployment time
     uint256 public _deployTimestamp;
 
-    /// @notice donation time period
-    uint256 public _donateTimePeriod = 365 days;
+    /// @notice time in which users can redeem
+    uint256 public _redeemLength;
 
-    /// @notice donation ratio
-    uint256 public _charity1Ratio = 0.385 ether; // Gitcoin
-    uint256 public _charity2Ratio = 0.615 ether; // Watoto
+    /// @notice charities addresses to receive donations
+    address[] private _donationCharities;
+
+    /// @notice charities addresses ratios
+    uint256[] private _donationRatios;
 
     constructor(
         address redeemedToken,
         address[] memory tokensReceived,
-        address[] memory charities,
-        uint256 redeemBase
+        uint256 redeemBase,
+        address[] memory donationCharities,
+        uint256[] memory donationRatios,
+        uint256 redeemLength
     ) {
         _redeemedToken = redeemedToken;
         _tokensReceived = tokensReceived;
-        _charities = charities;
         _redeemBase = redeemBase;
+        _donationCharities = donationCharities;
+        _donationRatios = donationRatios;
+        _redeemLength = redeemLength;
         _deployTimestamp = block.timestamp;
-    }
-
-    /// @notice Public function to get `_tokensReceived`
-    function tokensReceivedOnRedeem() public view returns (address[] memory) {
-        return _tokensReceived;
     }
 
     /// @notice Return the balances of `_tokensReceived` that would be
     /// transferred if redeeming `amountIn` of `_redeemedToken`.
-    function previewRedeem(uint256 amountIn)
+    function previewRedeem(
+        uint256 amountIn
+    )
         public
         view
         returns (address[] memory tokens, uint256[] memory amountsOut)
@@ -88,7 +88,9 @@ contract YamRedeemer is ReentrancyGuard {
 
     /// @notice Return the ratio of tokens to be sent to the charity
     /// previewDonation() is intentionally not gas optimized to alter as little code as possible
-    function previewDonation(uint256 charityRatio)
+    function previewDonation(
+        uint256 charityRatio
+    )
         public
         view
         returns (address[] memory tokens, uint256[] memory amountsOut)
@@ -127,30 +129,29 @@ contract YamRedeemer is ReentrancyGuard {
         emit Redeemed(msg.sender, to, amountIn, base);
     }
 
-    /// @notice Donate sends the remaining funds to the hardcoded charities after
-    /// 365 days has ellapsed
+    /// @notice Donate sends the remaining funds to the charities after redemption period ends
     function donate() external nonReentrant {
         require(
-            block.timestamp >= _deployTimestamp + _donateTimePeriod,
+            block.timestamp >= _deployTimestamp + _redeemLength,
             "not enough time"
         );
 
         (
             address[] memory tokens,
             uint256[] memory amountsOutCharity1
-        ) = previewDonation(_charity1Ratio);
+        ) = previewDonation(_donationRatios[0]);
 
         (, uint256[] memory amountsOutCharity2) = previewDonation(
-            _charity2Ratio
+            _donationRatios[1]
         );
 
         for (uint256 i = 0; i < tokens.length; i++) {
             IERC20(tokens[i]).safeTransfer(
-                _charities[0],
+                _donationCharities[0],
                 amountsOutCharity1[i]
             );
             IERC20(tokens[i]).safeTransfer(
-                _charities[1],
+                _donationCharities[1],
                 amountsOutCharity2[i]
             );
         }
@@ -158,18 +159,19 @@ contract YamRedeemer is ReentrancyGuard {
         emit Donated(msg.sender);
     }
 
-    /// @notice Tokens received on redemption
-    function tokensReceived() public view virtual returns (address[] memory) {
+    /// @notice Public function to get `_tokensReceived`
+    function tokensReceivedOnRedeem() public view returns (address[] memory) {
         return _tokensReceived;
     }
-
-    /// @notice Computes the redemption amounts
-    function redeemBase() public view virtual returns (uint256) {
-        return _redeemBase;
+    
+    /// @notice Public function to get `_donationCharities`
+    function charitiesAddresses() public view returns (address[] memory) {
+        return _donationCharities;
     }
 
-    /// @notice Charities addresses for donation
-    function charities() public view virtual returns (address[] memory) {
-        return _charities;
+    /// @notice Public function to get `_donationRatios`
+    function charitiesRatios() public view returns (uint256[] memory) {
+        return _donationRatios;
     }
+
 }

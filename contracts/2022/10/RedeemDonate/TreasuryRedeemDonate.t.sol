@@ -1,26 +1,31 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity 0.8.10;
 
-import "../../../utils/YAMTest.sol";
+import "../../../../utils/YAMTest.sol";
 import {IERC20, SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import {NewToken} from "../../../utils/NewToken.sol";
-import {YamRedeemer} from "./TreasuryRedeem.sol";
+import {NewToken} from "../../../../utils/NewToken.sol";
+import {TreasuryRedeemDonate} from "./TreasuryRedeemDonate.sol";
 
-contract YamRedeemerTest is YAMTest {
+contract TreasuryRedeemDonateTest is YAMTest {
     NewToken private testYAM;
     NewToken private testWETH;
     NewToken private testWBTC;
     NewToken private testDPI;
     NewToken private testYSTETH;
-    YamRedeemer private redeemer;
+    TreasuryRedeemDonate private redeemer;
 
-    uint256 private constant BASE = 10**18;
+    uint256 private constant BASE = 10 ** 18;
     uint256 private constant MINT_BASE = 15000000 * BASE;
     address private owner = address(this);
     address private user2 = address(50);
     uint256 private user2YAM = 100000 * BASE;
 
-    function test_redeemer() public {
+    address internal constant charity1 =
+        0x0000000000000000000000000000000000000001;
+    address internal constant charity2 =
+        0x0000000000000000000000000000000000000002;
+
+    function test_redeemer_donate() public {
         testYAM = new NewToken("TestYAM", "YAM");
         testWETH = new NewToken("TestWETH", "WETH");
         testWBTC = new NewToken("TestWBTC", "WBTC");
@@ -34,14 +39,20 @@ contract YamRedeemerTest is YAMTest {
         tokens[3] = address(testYSTETH);
 
         address[] memory charities = new address[](2);
-        charities[0] = address(0x0000000000000000000000000000000000000001);
-        charities[1] = address(0x0000000000000000000000000000000000000002);
+        charities[0] = address(charity1);
+        charities[1] = address(charity2);
 
-        redeemer = new YamRedeemer(
+        uint256[] memory charitiesRatios = new uint256[](2);
+        charitiesRatios[0] = 0.5 ether;
+        charitiesRatios[1] = 0.5 ether;
+
+        redeemer = new TreasuryRedeemDonate(
             address(testYAM),
             tokens,
+            MINT_BASE,
             charities,
-            MINT_BASE
+            charitiesRatios,
+            365 days
         );
 
         testYAM.mint(address(owner), MINT_BASE);
@@ -55,10 +66,7 @@ contract YamRedeemerTest is YAMTest {
             address[] memory tokensAddresses,
             uint256[] memory tokensAmounts
         ) = redeemer.previewRedeem(MINT_BASE);
-        assertEq(redeemer.redeemBase(), MINT_BASE);
-        assertEq(redeemer.charities()[0], address(charities[0]));
-        assertEq(redeemer.charities()[1], address(charities[1]));
-        assertEq(redeemer._donateTimePeriod(), 365 days);
+        assertEq(redeemer._redeemBase(), MINT_BASE);
 
         // Tokens are deployed correctly
         assertEq(tokensAddresses.length, 4);
@@ -109,12 +117,12 @@ contract YamRedeemerTest is YAMTest {
         // assertEq(testDPI.balanceOf(address(redeemer)), 0);
         // hevm.stopPrank();
 
-        // // Donate fails if time period not reached
+        // // donate fails if `_redeemLength` time period not reached
         // ff(100 days);
         // redeemer.donate();
 
-        // Donate after the time period of redemptions passes
-        ff(366 days);
+        // donate after `_redeemLength` time period passes
+        ff(370 days);
         redeemer.donate();
 
         // Redemption contract should have no tokens
@@ -126,31 +134,31 @@ contract YamRedeemerTest is YAMTest {
         // Charity 1 should have the allocated tokens percentage (0.385)
         assertEq(
             testWETH.balanceOf(address(charities[0])),
-            82261666666666666666
+            106833333333333333333
         );
-        assertEq(testWBTC.balanceOf(address(charities[0])), 256666666666666666);
+        assertEq(testWBTC.balanceOf(address(charities[0])), 333333333333333333);
         assertEq(
             testDPI.balanceOf(address(charities[0])),
-            233566666666666666666
+            303333333333333333333
         );
         assertEq(
             testYSTETH.balanceOf(address(charities[0])),
-            15785000000000000000
+            20500000000000000000
         );
 
         // Charity 2 should have the allocated tokens percentage (0.615)
         assertEq(
             testWETH.balanceOf(address(charities[1])),
-            131405000000000000000
+            106833333333333333333
         );
-        assertEq(testWBTC.balanceOf(address(charities[1])), 410000000000000000);
+        assertEq(testWBTC.balanceOf(address(charities[1])), 333333333333333333);
         assertEq(
             testDPI.balanceOf(address(charities[1])),
-            373100000000000000000
+            303333333333333333333
         );
         assertEq(
             testYSTETH.balanceOf(address(charities[1])),
-            25215000000000000000
+            20500000000000000000
         );
     }
 }

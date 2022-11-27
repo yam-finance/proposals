@@ -5,13 +5,13 @@ import {IERC20} from "openzeppelin-contracts/token/ERC20/IERC20.sol";
 import {YAMTokenInterface} from "../../../utils/YAMTokenInterface.sol";
 import {UniswapV2Router02} from "../../../utils/UniswapV2Router02.sol";
 import {ISablier} from "../../../utils/Sablier.sol";
-import {YamRedeemer} from "./TreasuryRedeem.sol";
 import "../../../utils/YAMDelegator.sol";
 
 interface IYVault {
-    function deposit(uint256 amount, address recipient)
-        external
-        returns (uint256);
+    function deposit(
+        uint256 amount,
+        address recipient
+    ) external returns (uint256);
 
     function withdraw(uint256 amount) external returns (uint256);
 }
@@ -46,10 +46,6 @@ contract Proposal33 {
     UniswapV2Router02 internal constant Sushiswap =
         UniswapV2Router02(0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F);
 
-    // to update redeemer address
-    YamRedeemer internal constant Redeemer =
-        YamRedeemer(0x0FB21Dd927C54bd588A2ab7C9f947764510D5303);
-
     address internal constant RESERVES =
         0x97990B693835da58A281636296D2Bf02787DEa17;
     address internal constant MULTISIG =
@@ -57,6 +53,10 @@ contract Proposal33 {
     address internal constant TIMELOCK =
         0x8b4f1616751117C38a0f84F9A146cca191ea3EC5;
     uint8 executeStep = 0;
+
+    // to update redeemer address
+    address internal constant Redeemer =
+        0x0FB21Dd927C54bd588A2ab7C9f947764510D5303;
 
     function execute() public {
         require(executeStep == 0);
@@ -82,8 +82,8 @@ contract Proposal33 {
 
         // // E
         // compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 18000, 0, 1);
-        // Feddas
-        compSend(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 15750, 0, 1);
+        // // Feddas
+        // compSend(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 15750, 0, 1);
 
         // Transfer remaining USDC to the redemption contract
         uint256 usdcBalance = USDC.balanceOf(address(this));
@@ -157,12 +157,12 @@ contract Proposal33 {
 
         // Yam vesting
 
-        // E
-        compStream(06x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 44199);
-        // Feddas
-        compStream(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 37292);
+        // // E
+        // compStream(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 44199);
+        // // Feddas
+        // compStream(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 37292);
         // Jpgs
-        compStream(0x653d3E4F2D7112a19f5Eb993890a3F27b48aDa5, 9392);
+        compStream(0x653d63E4F2D7112a19f5Eb993890a3F27b48aDa5, 9392);
 
         // Burn leftovers
         YAMV3.burn(YAM.balanceOf(address(this)));
@@ -187,17 +187,17 @@ contract Proposal33 {
         uint256 months
     ) internal {
         if (amountUSDC > 0) {
-            USDC.transfer(_address, amountUSDC * (10**6) * months);
+            USDC.transfer(_address, amountUSDC * (10 ** 6) * months);
         }
         if (amountYAM > 0) {
-            YAM.transfer(_address, amountYAM * (10**18) * months);
+            YAM.transfer(_address, amountYAM * (10 ** 18) * months);
         }
     }
 
     // Function to open steams
     function compStream(address _address, uint256 amountYAM) internal {
         if (amountYAM > 0) {
-            uint256 stream = uint256(amountYAM * (10**18));
+            uint256 stream = uint256(amountYAM * (10 ** 18));
             uint256 streamOut = (uint256(stream) / 15778500) * 15778500;
             Sablier.createStream(
                 _address,
