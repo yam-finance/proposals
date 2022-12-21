@@ -16,6 +16,40 @@ interface IYVault {
     function withdraw(uint256 amount) external returns (uint256);
 }
 
+interface IWETH {
+    function deposit() external payable;
+
+    function withdraw(uint256 wad) external;
+
+    function balanceOf(address) external view returns (uint256);
+}
+
+interface IYSTETHPool {
+    function withdraw(uint256 maxShares) external;
+
+    function deposit(uint256 _amount) external returns (uint256);
+}
+
+interface ILidoPool {
+    function exchange(
+        int128 i,
+        int128 j,
+        uint256 dx,
+        uint256 min_dy
+    ) external payable returns (uint256);
+
+    function add_liquidity(
+        uint256[2] memory amounts,
+        uint256 min_mint_amount
+    ) external payable returns (uint256);
+
+    function remove_liquidity_one_coin(
+        uint256 _token_amount,
+        int128 i,
+        uint256 min_uamount
+    ) external;
+}
+
 contract Proposal33 {
     /// Contracts and ERC20 addresses
     IERC20 internal constant WETH =
@@ -40,6 +74,10 @@ contract Proposal33 {
         IERC20(0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828);
     ISablier internal constant Sablier =
         ISablier(0xCD18eAa163733Da39c232722cBC4E8940b1D8888);
+    ILidoPool internal constant lidoPool =
+        ILidoPool(0xDC24316b9AE028F1497c275EB9192a3Ea0f67022);
+    address internal constant steCRV =
+        0x06325440D014e39736583c165C2963BA99fAf14E;
 
     YAMTokenInterface internal constant YAMV3 =
         YAMTokenInterface(0x0AaCfbeC6a24756c20D41914F2caba817C0d8521);
@@ -77,6 +115,11 @@ contract Proposal33 {
             address(this),
             IERC20(YAM).balanceOf(RESERVES)
         );
+        withdrawToken(
+            address(ystETH),
+            address(this),
+            IERC20(ystETH).balanceOf(RESERVES)
+        );
 
         // Comp transfers
 
@@ -110,9 +153,20 @@ contract Proposal33 {
             IERC20(SUSHI).balanceOf(RESERVES)
         );
 
-        // Transfer WETH to the redemption contract
-        uint256 wethBalance = WETH.balanceOf(address(this));
-        WETH.transfer(address(Redeemer), wethBalance);
+        // Unwrap ystETH into steCRV
+        IERC20(address(ystETH)).approve(address(steCRV), type(uint256).max);
+        uint256 ystETHBalance = IERC20(address(ystETH)).balanceOf(
+            address(this)
+        );
+        IYSTETHPool(address(ystETH)).withdraw(ystETHBalance);
+
+        // Unwrap steCRV into ETH
+        uint256 steCRVBalance = IERC20(steCRV).balanceOf(address(this));
+        lidoPool.remove_liquidity_one_coin(steCRVBalance, 0, uint256(1));
+
+        // Wrap ETH and transfer to the redemption contract
+        IWETH(address(WETH)).deposit{value: address(this).balance}();
+        WETH.transfer(address(Redeemer), WETH.balanceOf(address(this)));
 
         // Transfer tokens to the redemption contract
         withdrawToken(
@@ -121,29 +175,14 @@ contract Proposal33 {
             IERC20(WETH).balanceOf(RESERVES)
         );
         withdrawToken(
-            address(WBTC),
+            address(USDC),
             address(Redeemer),
-            IERC20(WBTC).balanceOf(RESERVES)
-        );
-        withdrawToken(
-            address(DPI),
-            address(Redeemer),
-            IERC20(DPI).balanceOf(RESERVES)
+            IERC20(USDC).balanceOf(RESERVES)
         );
         withdrawToken(
             address(yUSDC),
             address(Redeemer),
             IERC20(yUSDC).balanceOf(RESERVES)
-        );
-        withdrawToken(
-            address(ystETH),
-            address(Redeemer),
-            IERC20(ystETH).balanceOf(RESERVES)
-        );
-        withdrawToken(
-            address(UMA),
-            address(Redeemer),
-            IERC20(UMA).balanceOf(RESERVES)
         );
 
         executeStep++;
@@ -169,6 +208,8 @@ contract Proposal33 {
 
         executeStep++;
     }
+
+    fallback() external payable {}
 
     // Function to withdraw from treasury
     function withdrawToken(

@@ -17,12 +17,26 @@ interface YYCRV {
     function withdraw(uint256 shares) external;
 }
 
+interface ILidoPool {
+    function exchange(
+        int128 i,
+        int128 j,
+        uint256 dx,
+        uint256 min_dy
+    ) external payable returns (uint256);
+
+    function add_liquidity(uint256[2] memory amounts, uint256 min_mint_amount)
+        external
+        payable
+        returns (uint256);
+}
+
 contract Proposaltest is YAMTest {
     Proposal33 private proposal;
 
-    TreasuryRedeemForever private redeemer;
+    // TreasuryRedeemForever private redeemer;
     // TreasuryRedeemDonate private redeemer;
-    // TreasuryRedeemTemporary private redeemer;
+    TreasuryRedeemTemporary private redeemer;
 
     IERC20 internal constant WETH =
         IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
@@ -62,23 +76,19 @@ contract Proposaltest is YAMTest {
         setUpYAMTest();
         proposal = new Proposal33();
 
-        address[] memory tokens = new address[](7);
+        address[] memory tokens = new address[](3);
         tokens[0] = address(WETH);
-        tokens[1] = address(WBTC);
-        tokens[2] = address(DPI);
-        tokens[3] = address(USDC);
-        tokens[4] = address(yUSDC);
-        tokens[5] = address(ystETH);
-        tokens[6] = address(UMA);
+        tokens[1] = address(USDC);
+        tokens[2] = address(yUSDC);
 
         // Redemption
 
-        // Redeem Forever
-        redeemer = new TreasuryRedeemForever(
-            address(YAM),
-            tokens,
-            14586738954685070682848328
-        );
+        // // Redeem Forever
+        // redeemer = new TreasuryRedeemForever(
+        //     address(YAM),
+        //     tokens,
+        //     14586738954685070682848328
+        // );
 
         // // Redeem Donate
         // address[] memory charities = new address[](2);
@@ -96,29 +106,29 @@ contract Proposaltest is YAMTest {
         //     365 days
         // );
 
-        // // Redeem Temporary
-        // redeemer = new TreasuryRedeemTemporary(
-        //     address(YAM),
-        //     tokens,
-        //     14586738954685070682848328,
-        //     365 days
-        // );
+        // Redeem Temporary
+        redeemer = new TreasuryRedeemTemporary(
+            address(YAM),
+            tokens,
+            14586738954685070682848328,
+            97 days
+        );
     }
 
     function test_proposal_33() public {
-        address[] memory targets = new address[](6);
-        uint256[] memory values = new uint256[](6);
-        string[] memory signatures = new string[](6);
-        bytes[] memory calldatas = new bytes[](6);
+        address[] memory targets = new address[](3);
+        uint256[] memory values = new uint256[](3);
+        string[] memory signatures = new string[](3);
+        bytes[] memory calldatas = new bytes[](3);
         string
-            memory description = "Open treasury redemption forever, contributor comps for october.";
+            memory description = "Treasury redemption, contributor comps for october.";
 
         // Whitelist proposal for withdrawals
         targets[0] = address(reserves);
         signatures[0] = "whitelistWithdrawals(address[],uint256[],address[])";
-        address[] memory whos = new address[](10);
-        uint256[] memory amounts = new uint256[](10);
-        address[] memory tokens = new address[](10);
+        address[] memory whos = new address[](7);
+        uint256[] memory amounts = new uint256[](7);
+        address[] memory tokens = new address[](7);
 
         whos[0] = address(proposal);
         amounts[0] = type(uint256).max;
@@ -126,39 +136,27 @@ contract Proposaltest is YAMTest {
 
         whos[1] = address(proposal);
         amounts[1] = type(uint256).max;
-        tokens[1] = address(WBTC);
+        tokens[1] = address(USDC);
 
         whos[2] = address(proposal);
         amounts[2] = type(uint256).max;
-        tokens[2] = address(DPI);
+        tokens[2] = address(yUSDC);
 
         whos[3] = address(proposal);
         amounts[3] = type(uint256).max;
-        tokens[3] = address(USDC);
+        tokens[3] = address(ystETH);
 
         whos[4] = address(proposal);
         amounts[4] = type(uint256).max;
-        tokens[4] = address(yUSDC);
+        tokens[4] = address(YAMSLP);
 
         whos[5] = address(proposal);
         amounts[5] = type(uint256).max;
-        tokens[5] = address(ystETH);
+        tokens[5] = address(YAM);
 
         whos[6] = address(proposal);
         amounts[6] = type(uint256).max;
-        tokens[6] = address(YAMSLP);
-
-        whos[7] = address(proposal);
-        amounts[7] = type(uint256).max;
-        tokens[7] = address(YAM);
-
-        whos[8] = address(proposal);
-        amounts[8] = type(uint256).max;
-        tokens[8] = address(UMA);
-
-        whos[9] = address(proposal);
-        amounts[9] = type(uint256).max;
-        tokens[9] = address(SUSHI);
+        tokens[6] = address(SUSHI);
 
         calldatas[0] = abi.encode(whos, amounts, tokens);
 
@@ -172,24 +170,6 @@ contract Proposaltest is YAMTest {
         targets[2] = address(yamV3);
         signatures[2] = "mint(address,uint256)";
         calldatas[2] = abi.encode(address(proposal), totalToMatch);
-
-        // Withdraw UMA from twoKeyContract
-        targets[3] = address(twoKeyContract);
-        signatures[3] = "withdrawErc20(address,uint256)";
-        calldatas[3] = abi.encode(
-            address(UMA),
-            IERC20(UMA).balanceOf(twoKeyContract)
-        );
-
-        // Transfer UMA to reserves
-        targets[4] = address(UMA);
-        signatures[4] = "transfer(address,uint256)";
-        calldatas[4] = abi.encode(address(RESERVES), 43247684522568207410183);
-
-        // Update to 30 days
-        targets[5] = address(timelock);
-        signatures[5] = "setDelay(uint256)";
-        calldatas[5] = abi.encode(uint256(2592000), true);
 
         // Get quorum for test proposal
         getQuorum(yamV3, proposer);
@@ -206,19 +186,11 @@ contract Proposaltest is YAMTest {
         // Approve Redeemer and redeem 100k YAM
         YAM.approve(address(redeemer), type(uint256).max);
         redeemer.redeem(address(this), 100000 * (10 ** 18));
-
+        
         // User should have tokens after redemption
-        assertTrue(IERC20(WETH).balanceOf(address(this)) < 6500000000000000000);
-        assertTrue(IERC20(WBTC).balanceOf(address(this)) < 2000000);
-        assertTrue(IERC20(DPI).balanceOf(address(this)) < 15000000000000000000);
-        assertTrue(IERC20(USDC).balanceOf(address(this)) < 700000000);
-        assertTrue(IERC20(yUSDC).balanceOf(address(this)) < 10000000000);
-        assertTrue(
-            IERC20(ystETH).balanceOf(address(this)) < 900000000000000000
-        );
-        assertTrue(
-            IERC20(UMA).balanceOf(address(this)) < 300000000000000000000
-        );
+        assertTrue(IERC20(WETH).balanceOf(address(this)) < 7000000000000000000);
+        assertTrue(IERC20(USDC).balanceOf(address(this)) < 800000000);
+        assertTrue(IERC20(yUSDC).balanceOf(address(this)) < 15000000000);
 
         // // donate after `_redeemLength` time period passes
         // ff(370 days);
