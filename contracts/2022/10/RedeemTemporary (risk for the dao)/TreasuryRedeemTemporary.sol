@@ -98,25 +98,25 @@ contract TreasuryRedeemTemporary is ReentrancyGuard {
         emit Redeemed(msg.sender, to, amountIn, base);
     }
 
-    // /// @notice returnToReserves sends the all remaining funds back to treasury
-    // function returnToReserves() external nonReentrant {
-    //     require(
-    //         block.timestamp >= _deployTimestamp + _redeemLength + 7 days,
-    //         "not enough time"
-    //     );
-    //     (address[] memory tokens, uint256[] memory amountsOut) = previewRedeem(
-    //         _redeemBase
-    //     );
-    //     for (uint256 i = 0; i < tokens.length; i++) {
-    //         IERC20(tokens[i]).safeTransfer(reserves, amountsOut[i]);
-    //     }
-    //     // Tokens are transferred to reserves to be burnt
-    //     IERC20(_redeemedToken).safeTransfer(
-    //         reserves,
-    //         IERC20(_redeemedToken).balanceOf(address(this))
-    //     );
-    //     emit ReturnToReserves(msg.sender);
-    // }
+    /// @notice returnToReserves sends the all remaining funds back to treasury
+    function returnToReserves() external nonReentrant {
+        require(
+            block.timestamp >= _deployTimestamp + _redeemLength + 7 days,
+            "not enough time"
+        );
+        (address[] memory tokens, uint256[] memory amountsOut) = previewRedeem(
+            _redeemBase
+        );
+        for (uint256 i = 0; i < tokens.length; i++) {
+            IERC20(tokens[i]).safeTransfer(reserves, amountsOut[i]);
+        }
+        // Tokens are transferred to reserves to be burnt
+        IERC20(_redeemedToken).safeTransfer(
+            reserves,
+            IERC20(_redeemedToken).balanceOf(address(this))
+        );
+        emit ReturnToReserves(msg.sender);
+    }
 
     /// @notice Public function to get `_tokensReceived`
     function tokensReceivedOnRedeem() public view returns (address[] memory) {
