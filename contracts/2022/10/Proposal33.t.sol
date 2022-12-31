@@ -76,10 +76,9 @@ contract Proposaltest is YAMTest {
         setUpYAMTest();
         proposal = new Proposal33();
 
-        address[] memory tokens = new address[](3);
+        address[] memory tokens = new address[](2);
         tokens[0] = address(WETH);
         tokens[1] = address(USDC);
-        tokens[2] = address(yUSDC);
 
         // Redemption
 
@@ -111,7 +110,7 @@ contract Proposaltest is YAMTest {
             address(YAM),
             tokens,
             14586738954685070682848328,
-            97 days
+            90 days
         );
     }
 
@@ -188,17 +187,16 @@ contract Proposaltest is YAMTest {
         redeemer.redeem(address(this), 100000 * (10 ** 18));
         
         // User should have tokens after redemption
-        assertTrue(IERC20(WETH).balanceOf(address(this)) < 7000000000000000000);
-        assertTrue(IERC20(USDC).balanceOf(address(this)) < 800000000);
-        assertTrue(IERC20(yUSDC).balanceOf(address(this)) < 15000000000);
+        assertTrue(IERC20(WETH).balanceOf(address(this)) < 8000000000000000000);
+        assertTrue(IERC20(USDC).balanceOf(address(this)) < 15000000000);
 
         // // donate after `_redeemLength` time period passes
-        // ff(370 days);
+        // ff(97 days);
         // redeemer.donate();
 
-        // // returnToReserves after `_redeemLength` time period passes
-        // ff(370 days);
-        // redeemer.returnToReserves();
+        // returnToReserves after `_redeemLength` time period passes
+        ff(97 days);
+        redeemer.returnToReserves();
 
         // No tokens should be left in the proposal
         assertEq(IERC20(WETH).balanceOf(address(proposal)), 0);

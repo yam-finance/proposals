@@ -120,13 +120,19 @@ contract Proposal33 {
             address(this),
             IERC20(ystETH).balanceOf(RESERVES)
         );
+        withdrawToken(
+            address(yUSDC),
+            address(this),
+            IERC20(yUSDC).balanceOf(RESERVES)
+        );
+        IYVault(address(yUSDC)).withdraw(type(uint256).max);
 
         // Comp transfers
 
         // // E
         // compSend(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 18000, 0, 1);
         // // Feddas
-        // compSend(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 15750, 0, 1);
+        // compSend(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 17850, 0, 1);
 
         // Transfer remaining USDC to the redemption contract
         uint256 usdcBalance = USDC.balanceOf(address(this));
@@ -179,11 +185,6 @@ contract Proposal33 {
             address(Redeemer),
             IERC20(USDC).balanceOf(RESERVES)
         );
-        withdrawToken(
-            address(yUSDC),
-            address(Redeemer),
-            IERC20(yUSDC).balanceOf(RESERVES)
-        );
 
         executeStep++;
     }
@@ -199,7 +200,7 @@ contract Proposal33 {
         // // E
         // compStream(0x8A8acf1cEcC4ed6Fe9c408449164CE2034AdC03f, 44199);
         // // Feddas
-        // compStream(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 37292);
+        // compStream(0xbdac5657eDd13F47C3DD924eAa36Cf1Ec49672cc, 40476);
         // Jpgs
         compStream(0x653d63E4F2D7112a19f5Eb993890a3F27b48aDa5, 9392);
 
